@@ -14,7 +14,7 @@ public class Movement : MonoBehaviour
 
     private float yStart;
     private float xStart;
-    private float boundaryLength;
+    public float boundaryLength;
 
     private float lastJumpForce;
 
@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour
     {
         yStart = transform.position.y;
         xStart = transform.position.x;
-        boundaryLength = 8f;
+        //boundaryLength = 8f;
     }
 
     // Update is called once per frame
@@ -116,27 +116,30 @@ public class Movement : MonoBehaviour
     void collisionDetection()
     {
         // collision detection
-        GameObject[] CollisionObjects = GameObject.FindGameObjectsWithTag("CollisionObject");
+        GameObject[] CollisionObjects = GameObject.FindGameObjectsWithTag("Obstacle");
 
         GameObject closestCollision = null;
         float searchRange = Mathf.Infinity;
         Vector3 position = transform.position;
 
-        foreach (GameObject cO in CollisionObjects)
+        if (CollisionObjects.Length >= 1)
         {
-            Vector3 diff = cO.transform.position - position;
-            float curDistance = diff.sqrMagnitude;
-            if (curDistance < searchRange)
+            foreach (GameObject cO in CollisionObjects)
             {
-                closestCollision = cO;
-                searchRange = curDistance;
+                Vector3 diff = cO.transform.position - position;
+                float curDistance = diff.sqrMagnitude;
+                if (curDistance < searchRange)
+                {
+                    closestCollision = cO;
+                    searchRange = curDistance;
+                }
             }
-        }
 
-        // collision detection
-        if (Vector3.Distance(closestCollision.transform.position, transform.position) < 1)
-        {
-            print("Collision detected!");
+            // collision detection
+            if (Vector3.Distance(closestCollision.transform.position, transform.position) < 1)
+            {
+                print("Collision detected!");
+            }
         }
 
     }
