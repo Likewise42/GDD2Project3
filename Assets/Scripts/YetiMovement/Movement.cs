@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour {
+public class Movement : MonoBehaviour
+{
 
     private Vector3 acceleration;
     private Vector3 velocity;
@@ -10,19 +11,25 @@ public class Movement : MonoBehaviour {
     private bool dDown;
     private bool wDown;
     private bool applyGrav;
-    // the 'ground'
+
     private float yStart;
+    private float xStart;
+    private float boundaryLength;
 
     private float lastJumpForce;
 
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         yStart = transform.position.y;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        xStart = transform.position.x;
+        boundaryLength = 8f;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
         acceleration = Vector3.zero;
 
@@ -31,13 +38,11 @@ public class Movement : MonoBehaviour {
         {
             acceleration += new Vector3(0, 1, 0);
             wDown = true;
-            print("w down");
         }
         if (Input.GetKeyUp("w"))
         {
             acceleration -= new Vector3(0, 1, 0);
             wDown = false;
-            print("w up");
         }
 
         // d key
@@ -45,13 +50,11 @@ public class Movement : MonoBehaviour {
         {
             acceleration += new Vector3(1, 0, 0);
             dDown = true;
-            print("d down");
         }
         if (Input.GetKeyUp("d"))
         {
             acceleration -= new Vector3(1, 0, 0);
             dDown = false;
-            print("d up");
         }
 
         // a key
@@ -59,13 +62,11 @@ public class Movement : MonoBehaviour {
         {
             acceleration += new Vector3(-1, 0, 0);
             aDown = true;
-            print("a down");
         }
         if (Input.GetKeyUp("a"))
         {
             acceleration -= new Vector3(-1, 0, 0);
             aDown = false;
-            print("a up");
         }
 
         // jumping
@@ -79,9 +80,9 @@ public class Movement : MonoBehaviour {
             velocity.y += lastJumpForce;
             lastJumpForce = 0;
         }
-        
+
         // creates gravity
-        if(applyGrav)
+        if (applyGrav)
         {
             acceleration.y -= 0.05f;
             lastJumpForce += 0.05f;
@@ -90,9 +91,53 @@ public class Movement : MonoBehaviour {
 
         // changes velocity
         velocity += acceleration;
-        
+
         // update position every frame
         transform.Translate((velocity * Time.deltaTime) * 15);
+
+        // left and right boundaries
+        if (transform.position.x > xStart + boundaryLength)
+        {
+            Vector3 overflowVec = new Vector3(-1 * (transform.position.x - (xStart + boundaryLength)), 0, 0);
+            transform.Translate(overflowVec);
+        }
+        else if (transform.position.x < xStart - boundaryLength)
+        {
+            Vector3 overflowVec = new Vector3(-1 * (transform.position.x + (xStart + boundaryLength)), 0, 0);
+            transform.Translate(overflowVec);
+        }
+
+
+        collisionDetection();
+
+
+    }
+
+    void collisionDetection()
+    {
+        // collision detection
+        GameObject[] CollisionObjects = GameObject.FindGameObjectsWithTag("CollisionObject");
+
+        GameObject closestCollision = null;
+        float searchRange = Mathf.Infinity;
+        Vector3 position = transform.position;
+
+        foreach (GameObject cO in CollisionObjects)
+        {
+            Vector3 diff = cO.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < searchRange)
+            {
+                closestCollision = cO;
+                searchRange = curDistance;
+            }
+        }
+
+        // collision detection
+        if (Vector3.Distance(closestCollision.transform.position, transform.position) < 1)
+        {
+            print("Collision detected!");
+        }
 
     }
 }
