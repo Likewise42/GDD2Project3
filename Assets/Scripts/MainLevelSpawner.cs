@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelSpawner : MonoBehaviour {
+public class MainLevelSpawner : MonoBehaviour {
 
     private const int SPAWN_INTERVAL = 180;
-    private const int HALF_LEVEL_WIDTH = 7;
+    private const int HALF_LEVEL_WIDTH = 45;
 
     private List<GameObject> obstacles;
+    private GameObject levelObj;
     private int spawnTimer;
     private Vector3 startPos;
+    private Quaternion startRot;
 
     public GameObject obstaclePrefab;
 
@@ -17,18 +19,16 @@ public class LevelSpawner : MonoBehaviour {
 	void Start () {
         obstacles = new List<GameObject>();
         spawnTimer = SPAWN_INTERVAL / 2;
-        startPos = new Vector3(-12.0f, 0.55f, 0);
-	}
+        startPos = gameObject.transform.position;
+        startRot = gameObject.transform.rotation;
+
+        levelObj = GameObject.FindGameObjectWithTag("World");
+    }
 	
 	// Update is called once per frame
 	void Update () {
         CullList();
-
-        foreach (GameObject obst in obstacles)
-        {
-            MoveObject(obst);
-        }
-
+        
         if (spawnTimer <= 0)
         {
             obstacles.Add(CreateObstacle());
@@ -77,14 +77,15 @@ public class LevelSpawner : MonoBehaviour {
     GameObject CreateObstacle()
     {
         GameObject newObstacle = Instantiate(obstaclePrefab,
-                                                obstaclePrefab.transform.position,
-                                                Quaternion.identity);
+                                                startPos,
+                                                startRot);
 
         // Randomize obstacle's starting z position
         Vector3 obstacleStartPos = startPos;
-        obstacleStartPos.z += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;  
+        obstacleStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;  
 
         newObstacle.transform.position = obstacleStartPos;
+        newObstacle.transform.parent = levelObj.transform;
 
         return newObstacle;
     }
