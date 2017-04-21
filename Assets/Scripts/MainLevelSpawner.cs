@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MainLevelSpawner : MonoBehaviour {
 
-    private const int SPAWN_INTERVAL = 180;
+    private const int SPAWN_INTERVAL = 120;
     private const int HALF_LEVEL_WIDTH = 45;
 
     private List<GameObject> obstacles;
@@ -80,7 +80,7 @@ public class MainLevelSpawner : MonoBehaviour {
                                                 startPos,
                                                 startRot);
 
-        // Randomize obstacle's starting z position
+        // Randomize obstacle's starting x position
         Vector3 obstacleStartPos = startPos;
         obstacleStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;  
 

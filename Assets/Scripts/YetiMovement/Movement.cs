@@ -113,34 +113,18 @@ public class Movement : MonoBehaviour
 
     }
 
-    void collisionDetection()
+    void CollideWithObstacle()
     {
-        // collision detection
-        GameObject[] CollisionObjects = GameObject.FindGameObjectsWithTag("Obstacle");
-
-        GameObject closestCollision = null;
-        float searchRange = Mathf.Infinity;
-        Vector3 position = transform.position;
-
-        if (CollisionObjects.Length >= 1)
-        {
-            foreach (GameObject cO in CollisionObjects)
-            {
-                Vector3 diff = cO.transform.position - position;
-                float curDistance = diff.sqrMagnitude;
-                if (curDistance < searchRange)
-                {
-                    closestCollision = cO;
-                    searchRange = curDistance;
-                }
-            }
-
-            // collision detection
-            if (Vector3.Distance(closestCollision.transform.position, transform.position) < 1)
-            {
-                print("Collision detected!");
-            }
-        }
-
+        Debug.Log("Hit an obstacle");
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        GameObject otherObj = other.gameObject;
+        if (otherObj.CompareTag("Obstacle"))
+        {
+            CollideWithObstacle();
+        }
+    }
+    
 }
