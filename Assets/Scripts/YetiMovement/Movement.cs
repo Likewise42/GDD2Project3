@@ -108,7 +108,7 @@ public class Movement : MonoBehaviour
         }
 
 
-        collisionDetection();
+        //collisionDetection();
 
 
     }
