@@ -8,6 +8,8 @@ public class GameScreenScript : MonoBehaviour {
     public GameObject MainPanel;
     public GameObject PausePanel;
 
+    public GameObject[] ThingsToMakeGoAway;
+
     public Slider DistanceSlider;
     public Text Coldcash;
     public Text Score;
@@ -29,11 +31,19 @@ public class GameScreenScript : MonoBehaviour {
             {
                 MainPanel.SetActive(false);
                 PausePanel.SetActive(true);
+                foreach(GameObject go in ThingsToMakeGoAway)
+                {
+                    go.SetActive(false);
+                }
             }
             else
             {
                 MainPanel.SetActive(true);
                 PausePanel.SetActive(false);
+                foreach (GameObject go in ThingsToMakeGoAway)
+                {
+                    go.SetActive(true);
+                }
             }
         }
 
