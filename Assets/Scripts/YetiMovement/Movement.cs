@@ -11,6 +11,7 @@ public class Movement : MonoBehaviour
     private bool dDown;
     private bool wDown;
     private bool applyGrav;
+    private bool jump;
 
     private float yStart;
     private float xStart;
@@ -25,6 +26,8 @@ public class Movement : MonoBehaviour
         yStart = transform.position.y;
         xStart = transform.position.x;
         //boundaryLength = 8f;
+
+        jump = false;
     }
 
     // Update is called once per frame
@@ -36,13 +39,15 @@ public class Movement : MonoBehaviour
         // w key
         if (Input.GetKeyDown("w"))
         {
-            acceleration += new Vector3(0, 1, 0);
+            acceleration += new Vector3(0, 2, 0);
             wDown = true;
+            jump = true;
         }
         if (Input.GetKeyUp("w"))
         {
-            acceleration -= new Vector3(0, 1, 0);
+            acceleration -= new Vector3(0, 2, 0);
             wDown = false;
+            jump = false;
         }
 
         // d key
@@ -109,8 +114,8 @@ public class Movement : MonoBehaviour
 
 
         //collisionDetection();
-
-
+        
+        gameObject.GetComponent<Animator>().SetBool("Jumping", jump);
     }
 
     void CollideWithObstacle()
