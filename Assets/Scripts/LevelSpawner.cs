@@ -4,30 +4,32 @@ using UnityEngine;
 
 public class LevelSpawner : MonoBehaviour {
 
-    private const int SPAWN_INTERVAL = 180;
-    private const int HALF_LEVEL_WIDTH = 7;
+    public const int SPAWN_INTERVAL = 120;
+    public const int HALF_LEVEL_WIDTH = 45;
 
     private List<GameObject> obstacles;
+    private GameObject levelObj;
     private int spawnTimer;
     private Vector3 startPos;
+    private Quaternion startRot;
 
     public GameObject obstaclePrefab;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         obstacles = new List<GameObject>();
         spawnTimer = SPAWN_INTERVAL / 2;
-        startPos = new Vector3(-12.0f, 0.55f, 0);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        CullList();
+        startPos = gameObject.transform.position;
+        startRot = gameObject.transform.rotation;
 
-        foreach (GameObject obst in obstacles)
-        {
-            MoveObject(obst);
-        }
+        levelObj = GameObject.FindGameObjectWithTag("World");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        CullList();
 
         if (spawnTimer <= 0)
         {
@@ -77,14 +79,15 @@ public class LevelSpawner : MonoBehaviour {
     GameObject CreateObstacle()
     {
         GameObject newObstacle = Instantiate(obstaclePrefab,
-                                                obstaclePrefab.transform.position,
-                                                Quaternion.identity);
+                                                startPos,
+                                                startRot);
 
-        // Randomize obstacle's starting z position
+        // Randomize obstacle's starting x position
         Vector3 obstacleStartPos = startPos;
-        obstacleStartPos.z += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;  
+        obstacleStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
 
         newObstacle.transform.position = obstacleStartPos;
+        newObstacle.transform.parent = levelObj.transform;
 
         return newObstacle;
     }
