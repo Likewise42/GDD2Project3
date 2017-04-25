@@ -23,7 +23,7 @@ public class LevelManager : MonoBehaviour {
     void Start () {
         // Start timer a little bit along
         obstacleSpawnTimer = OBSTACLE_SPAWN_INTERVAL / 2;
-        rampSpawnTimer = RAMP_SPAWN_INTERVAL / 2;
+        rampSpawnTimer = RAMP_SPAWN_INTERVAL / 2 - 10;
         levelEndSpawnTimer = 0;
         stopSpawning = false;
 
