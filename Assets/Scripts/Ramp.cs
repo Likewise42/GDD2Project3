@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Obstacle : MonoBehaviour {
+public class Ramp : MonoBehaviour {
 
     private bool reachedEnd;
 
@@ -11,17 +11,19 @@ public class Obstacle : MonoBehaviour {
         get { return reachedEnd; }
     }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         reachedEnd = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
 
-    void OnTriggerEnter (Collider other)
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    void OnTriggerEnter(Collider other)
     {
         GameObject otherObj = other.gameObject;
         if (otherObj.CompareTag("Despawner"))

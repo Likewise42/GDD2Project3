@@ -123,12 +123,30 @@ public class Movement : MonoBehaviour
         Debug.Log("Hit an obstacle");
     }
 
+    void CollideWithRamp()
+    {
+        Debug.Log("Hit a ramp");
+    }
+
+    void CollideWithLevelEnd()
+    {
+        Debug.Log("Hit end of level");
+    }
+
     void OnTriggerEnter(Collider other)
     {
         GameObject otherObj = other.gameObject;
         if (otherObj.CompareTag("Obstacle"))
         {
             CollideWithObstacle();
+        }
+        else if (otherObj.CompareTag("Ramp"))
+        {
+            CollideWithRamp();
+        }
+        else if (otherObj.CompareTag("LevelEnd"))
+        {
+            CollideWithLevelEnd();
         }
     }
     

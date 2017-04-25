@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelSpawner : MonoBehaviour {
-
-    public const int SPAWN_INTERVAL = 120;
+    
     public const int HALF_LEVEL_WIDTH = 45;
 
+    public GameObject obstaclePrefab;
+    public GameObject rampPrefab;
+    public GameObject levelEndPrefab;
+
     private List<GameObject> obstacles;
+    private List<GameObject> ramps;
     private GameObject levelObj;
-    private int spawnTimer;
     private Vector3 startPos;
     private Quaternion startRot;
-
-    public GameObject obstaclePrefab;
 
     // Use this for initialization
     void Start()
     {
         obstacles = new List<GameObject>();
-        spawnTimer = SPAWN_INTERVAL / 2;
+        ramps = new List<GameObject>();
         startPos = gameObject.transform.position;
         startRot = gameObject.transform.rotation;
 
@@ -29,24 +30,13 @@ public class LevelSpawner : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        CullList();
-
-        if (spawnTimer <= 0)
-        {
-            obstacles.Add(CreateObstacle());
-
-            spawnTimer = SPAWN_INTERVAL;
-        }
-        else
-        {
-            spawnTimer--;
-        }
+        CullObjects();
     }
 
     /// <summary>
-    /// CullList iterates over the obstacles list and removes any member for whom reachedEnd == true
+    /// CullObstacles iterates over the obstacles list and removes any member for whom reachedEnd == true
     /// </summary>
-    void CullList()
+    void CullObstacles()
     {
         for (int i = obstacles.Count - 1; i >= 0; i--)
         {
@@ -58,6 +48,32 @@ public class LevelSpawner : MonoBehaviour {
                 Destroy(obst);
             }
         }
+    }
+
+    /// <summary>
+    /// CullRamps iterates over the ramps list and removes any member for whom reachedEnd == true
+    /// </summary>
+    void CullRamps()
+    {
+        for (int i = ramps.Count - 1; i >= 0; i--)
+        {
+            GameObject ramp = ramps[i];
+            Ramp rampScript = ramp.GetComponent<Ramp>();
+            if (rampScript.ReachedEnd)
+            {
+                ramps.RemoveAt(i);
+                Destroy(ramp);
+            }
+        }
+    }
+
+    /// <summary>
+    /// CullLists is a convenience method so we can call a single method to cull all lists
+    /// </summary>
+    void CullObjects()
+    {
+        CullObstacles();
+        CullRamps();
     }
 
     /// <summary>
@@ -76,7 +92,7 @@ public class LevelSpawner : MonoBehaviour {
     /// CreateObstacle creates an instance of the obstacle prefab defined in the spawner
     /// </summary>
     /// <returns>A new obstacle GameObject</returns>
-    GameObject CreateObstacle()
+    public GameObject CreateObstacle()
     {
         GameObject newObstacle = Instantiate(obstaclePrefab,
                                                 startPos,
@@ -89,6 +105,46 @@ public class LevelSpawner : MonoBehaviour {
         newObstacle.transform.position = obstacleStartPos;
         newObstacle.transform.parent = levelObj.transform;
 
+        obstacles.Add(newObstacle);
+
         return newObstacle;
+    }
+
+    /// <summary>
+    /// CreateaRamp creates an instance of the ramp prefab defined in the spawner
+    /// </summary>
+    /// <returns>A new obstacle GameObject</returns>
+    public GameObject CreateRamp()
+    {
+        GameObject newRamp = Instantiate(rampPrefab,
+                                                startPos,
+                                                startRot);
+
+        // Randomize obstacle's starting x position
+        Vector3 rampStartPos = startPos;
+        rampStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
+
+        newRamp.transform.position = rampStartPos;
+        newRamp.transform.parent = levelObj.transform;
+
+        ramps.Add(newRamp);
+
+        return newRamp;
+    }
+
+    public GameObject CreateLevelEnd()
+    {
+        GameObject levelEnd = Instantiate(levelEndPrefab,
+                                                startPos,
+                                                startRot);
+
+        // Randomize obstacle's starting x position
+        Vector3 levelEndStartPos = startPos;
+        levelEndStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
+
+        levelEnd.transform.position = levelEndStartPos;
+        levelEnd.transform.parent = levelObj.transform;
+
+        return levelEnd;
     }
 }
