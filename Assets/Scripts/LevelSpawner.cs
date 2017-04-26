@@ -111,7 +111,7 @@ public class LevelSpawner : MonoBehaviour {
     }
 
     /// <summary>
-    /// CreateaRamp creates an instance of the ramp prefab defined in the spawner
+    /// CreateRamp creates an instance of the ramp prefab defined in the spawner
     /// </summary>
     /// <returns>A new obstacle GameObject</returns>
     public GameObject CreateRamp()
@@ -140,7 +140,6 @@ public class LevelSpawner : MonoBehaviour {
 
         // Randomize obstacle's starting x position
         Vector3 levelEndStartPos = startPos;
-        levelEndStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
 
         levelEnd.transform.position = levelEndStartPos;
         levelEnd.transform.parent = levelObj.transform;
