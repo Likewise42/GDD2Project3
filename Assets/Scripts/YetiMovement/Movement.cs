@@ -83,8 +83,7 @@ public class Movement : MonoBehaviour
         }
 
 
-       
-
+        Debug.Log("yPos: " + transform.position.y + " yStart: " + yStart);
         // jumping
         if (transform.position.y > yStart) // if they are above the 'gound' apply gravity
         {
@@ -93,27 +92,26 @@ public class Movement : MonoBehaviour
         else // return the y velocity to 0
         {
             applyGrav = false;
-            velocity.y += lastJumpForce;
-            lastJumpForce = 0;
+            transform.position = new Vector3(transform.position.x, yStart, transform.position.z);
+            velocity.y = 0f;
+            acceleration.y = 0f;
+            //velocity.y += lastJumpForce;
+            //lastJumpForce = 0;
         }
 
         // applies gravity
         if (applyGrav)
         {
-            print("falling");
             acceleration.y -= 0.05f;
-            lastJumpForce += 0.05f;
-            //transform.Translate(new Vector3(0, -0.3f, 0));
+            //lastJumpForce += 0.05f;
         }
-        else
-        {
-            velocity.y += lastJumpForce;
-            //transform.Translate(new Vector3(0, 0, 0));
-        }
+        
 
         // ramp collision resolution
         if (collidingWithRamp == true)
         {
+            Debug.Log("Colliding with ramp");
+            //acceleration.y += 0.5f;
             transform.Translate(new Vector3(0, 0.5f, 0));
         }
         else if(!collidingWithRamp && justLeftRamp)
@@ -121,12 +119,9 @@ public class Movement : MonoBehaviour
             print("just left ramp");
             acceleration.y += world.GetComponent<WorldSpin>().speed / 10f + (transform.position.y - yStart) / 10f;
             justLeftRamp = false;
-        } else
-        {
-
         }
 
-
+        
         // changes velocity
         velocity += acceleration;
 
@@ -165,7 +160,7 @@ public class Movement : MonoBehaviour
 
     void ExitCollideWithRamp()
     {
-        Debug.Log("Hit a ramp");
+        Debug.Log("Exiting ramp");
         collidingWithRamp = false;
         justLeftRamp = true;
         //velocity.y += 1f;
