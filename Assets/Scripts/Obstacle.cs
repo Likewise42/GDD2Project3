@@ -23,12 +23,10 @@ public class Obstacle : MonoBehaviour {
 
     void OnTriggerEnter (Collider other)
     {
-        GameObject endZone = GameObject.FindGameObjectWithTag("Despawner");
         GameObject otherObj = other.gameObject;
-        if (otherObj.Equals(endZone))
+        if (otherObj.CompareTag("Despawner"))
         {
             reachedEnd = true;
         }
     }
-    
 }
