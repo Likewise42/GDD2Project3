@@ -80,6 +80,23 @@ public class storeGMScript : MonoBehaviour
 
     }
 
+    void rightCameraControls()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && rightCameraTransform.position.z < -4)
+        {
+            Vector3 moveZ = new Vector3(0, 0, 2);
+
+            rightCameraTransform.position += moveZ;
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow) && (rightCameraTransform.position.z > -12))
+        {
+            Vector3 moveZ = new Vector3(0, 0, 2);
+
+            rightCameraTransform.position -= moveZ;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -88,7 +105,7 @@ public class storeGMScript : MonoBehaviour
         seek(targetTransform);
         mainCamera.transform.position += (velocity * Time.deltaTime);
 
-
+        //switching camera
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
             targetTransform = startingCameraTransform;
@@ -113,6 +130,11 @@ public class storeGMScript : MonoBehaviour
 
             //disableAllCameras();
             //rightCamera.enabled = true;
+        }
+
+        if(targetTransform == rightCameraTransform)
+        {
+            rightCameraControls();
         }
     }
 }
