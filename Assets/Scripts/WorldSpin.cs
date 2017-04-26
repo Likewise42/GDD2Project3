@@ -6,7 +6,7 @@ public class WorldSpin : MonoBehaviour {
 
     public GameObject player;
     public Camera cam;
-    private float speed;
+    public float speed;
     public float maxSpeed;
     public float acceleration;
     private Vector3 camOriginal;
@@ -39,6 +39,6 @@ public class WorldSpin : MonoBehaviour {
 
     public void Slow()
     {
-        speed = speed * .7f;
+        speed = speed * .3f;
     }
 }

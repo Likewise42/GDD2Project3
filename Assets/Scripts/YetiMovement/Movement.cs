@@ -15,9 +15,14 @@ public class Movement : MonoBehaviour
 
     private float yStart;
     private float xStart;
+    private float zStart;
     public float boundaryLength;
+    public GameObject world;
 
     private float lastJumpForce;
+
+    private bool collidingWithRamp;
+    private bool justLeftRamp;
 
 
     // Use this for initialization
@@ -25,8 +30,11 @@ public class Movement : MonoBehaviour
     {
         yStart = transform.position.y;
         xStart = transform.position.x;
+        zStart = transform.position.z;
         //boundaryLength = 8f;
 
+        collidingWithRamp = false;
+        justLeftRamp = false;
         jump = false;
     }
 
@@ -74,6 +82,9 @@ public class Movement : MonoBehaviour
             aDown = false;
         }
 
+
+       
+
         // jumping
         if (transform.position.y > yStart) // if they are above the 'gound' apply gravity
         {
@@ -86,11 +97,33 @@ public class Movement : MonoBehaviour
             lastJumpForce = 0;
         }
 
-        // creates gravity
+        // applies gravity
         if (applyGrav)
         {
+            print("falling");
             acceleration.y -= 0.05f;
             lastJumpForce += 0.05f;
+            //transform.Translate(new Vector3(0, -0.3f, 0));
+        }
+        else
+        {
+            velocity.y += lastJumpForce;
+            //transform.Translate(new Vector3(0, 0, 0));
+        }
+
+        // ramp collision resolution
+        if (collidingWithRamp == true)
+        {
+            transform.Translate(new Vector3(0, 0.5f, 0));
+        }
+        else if(!collidingWithRamp && justLeftRamp)
+        {
+            print("just left ramp");
+            acceleration.y += world.GetComponent<WorldSpin>().speed / 10f + (transform.position.y - yStart) / 10f;
+            justLeftRamp = false;
+        } else
+        {
+
         }
 
 
@@ -121,11 +154,21 @@ public class Movement : MonoBehaviour
     void CollideWithObstacle()
     {
         Debug.Log("Hit an obstacle");
+        world.GetComponent<WorldSpin>().Slow();
     }
 
     void CollideWithRamp()
     {
         Debug.Log("Hit a ramp");
+        collidingWithRamp = true;
+    }
+
+    void ExitCollideWithRamp()
+    {
+        Debug.Log("Hit a ramp");
+        collidingWithRamp = false;
+        justLeftRamp = true;
+        //velocity.y += 1f;
     }
 
     void CollideWithLevelEnd()
@@ -149,5 +192,15 @@ public class Movement : MonoBehaviour
             CollideWithLevelEnd();
         }
     }
-    
+
+    void OnTriggerExit(Collider other)
+    {
+        GameObject otherObj = other.gameObject;
+        if (otherObj.CompareTag("Ramp"))
+        {
+            ExitCollideWithRamp();
+        }
+    }
+
 }
+ 
