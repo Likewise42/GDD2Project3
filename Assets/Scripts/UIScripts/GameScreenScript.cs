@@ -17,7 +17,6 @@ public class GameScreenScript : MonoBehaviour {
 
     #region testVars
 
-    private int coldCash = 0;
     private int score = 0;
     private float distance = 0.0f;
 
@@ -47,12 +46,14 @@ public class GameScreenScript : MonoBehaviour {
             }
         }
 
+
+
+
         #region TestCode
 
         if (Input.GetKey(KeyCode.C))
         {
-            coldCash += 1;
-            SetColdCash(coldCash);
+            YetiGameData.ColdCash += 1;
         }
         if (Input.GetKey(KeyCode.V))
         {
@@ -83,6 +84,9 @@ public class GameScreenScript : MonoBehaviour {
 
 
         #endregion
+
+
+        SetColdCash(YetiGameData.ColdCash);
     }
 
 
@@ -91,7 +95,7 @@ public class GameScreenScript : MonoBehaviour {
         Score.text = "Score: " + score;
     }
 
-    public void SetColdCash(int coldCash)
+    public void SetColdCash(uint coldCash)
     {
         Coldcash.text = "Cold Cash: " + coldCash;
     }
