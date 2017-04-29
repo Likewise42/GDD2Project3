@@ -76,6 +76,8 @@ public class storeGMScript : MonoBehaviour
         else
         {
             velocity = new Vector3();
+
+            mainCamera.transform.position = target.position;
         }
 
     }
