@@ -29,6 +29,13 @@ public class storeGMScript : MonoBehaviour
     public float closeDist;
 
     public float rotationSpeed;
+    
+    // 1 is whole shop, 2 is Yetis, 3 is snowboards
+    private int whichView;
+
+    //script for when the yeti shop script is done;
+    //public yetiShop shopScript;
+
 
     // Use this for initialization
     void Start()
@@ -42,6 +49,8 @@ public class storeGMScript : MonoBehaviour
         rightCamera.enabled = false;
         clerkCamera.enabled = false;
 
+
+        whichView = 1;
     }
 
     //void disableAllCameras()
@@ -82,16 +91,16 @@ public class storeGMScript : MonoBehaviour
 
     }
 
-    void rightCameraControls()
+    public void moveRightCam(string direction)
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && rightCameraTransform.position.z < -4)
+        if (direction == "left")
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
             rightCameraTransform.position += moveZ;
+            
         }
-
-        if (Input.GetKeyDown(KeyCode.RightArrow) && (rightCameraTransform.position.z > -12))
+        else if(direction == "right")
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
@@ -99,44 +108,108 @@ public class storeGMScript : MonoBehaviour
         }
     }
 
+    public void moveLeftCam(string direction)
+    {
+        if (direction == "left")
+        {
+            Vector3 moveZ = new Vector3(0, 0, 2);
+
+            leftCameraTransform.position -= moveZ;
+
+        }
+        else if (direction == "right")
+        {
+            Vector3 moveZ = new Vector3(0, 0, 2);
+
+            leftCameraTransform.position += moveZ;
+        }
+    }
+
+    void rightCameraControls()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && rightCameraTransform.position.z < -4)
+        {
+            moveRightCam("left");
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow) && (rightCameraTransform.position.z > -12))
+        {
+            moveRightCam("right");
+        }
+    }
+
+    void leftCameraControls()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow) && leftCameraTransform.position.z < -4)
+        {
+            moveLeftCam("right");
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && (leftCameraTransform.position.z > -12))
+        {
+            moveLeftCam("left");
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        //slerp rotation
         mainCamera.transform.rotation = Quaternion.Slerp(mainCamera.transform.rotation, targetTransform.rotation, rotationSpeed * Time.deltaTime);
 
+        //seek the target then updatethe position
         seek(targetTransform);
         mainCamera.transform.position += (velocity * Time.deltaTime);
 
         //switching camera
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
+            //starting
             targetTransform = startingCameraTransform;
+
+            whichView = 1;
 
             //disableAllCameras();
             //mainCamera.enabled = true;
         } else if (Input.GetKeyDown(KeyCode.Keypad2))
         {
-            targetTransform = clerkCameraTransform;
+            //yetis
+            targetTransform = rightCameraTransform;
+
+            whichView = 2;
 
             //disableAllCameras();
             //clerkCamera.enabled = true;
-        } else if (Input.GetKeyDown(KeyCode.Keypad3))
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad3))
         {
+            //snowbaords
             targetTransform = leftCameraTransform;
+
+            whichView = 3;
 
             //disableAllCameras();
             //leftCamera.enabled = true;
         } else if (Input.GetKeyDown(KeyCode.Keypad4))
         {
-            targetTransform = rightCameraTransform;
+            targetTransform = clerkCameraTransform;
 
             //disableAllCameras();
             //rightCamera.enabled = true;
         }
 
-        if(targetTransform == rightCameraTransform)
+        //decide which controls to use
+        //if looking at yetis
+        if(whichView == 2)
         {
             rightCameraControls();
         }
+        //else if looking at boards
+        else if (whichView == 3)
+        {
+            leftCameraControls();
+        }
+
+
     }
 }
