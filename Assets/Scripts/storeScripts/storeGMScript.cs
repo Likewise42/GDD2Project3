@@ -30,16 +30,18 @@ public class storeGMScript : MonoBehaviour
 
     public float rotationSpeed;
     
-    // 1 is whole shop, 2 is Yetis, 3 is snowboards
+    // 1 is whole shop, 2 is Yetis, 3 is snowboards, 4 is guy
     private int whichView;
 
     //script for when the yeti shop script is done;
-    //public yetiShop shopScript;
+    public yetiShop shopScript;
 
 
     // Use this for initialization
     void Start()
     {
+
+
 
         //targetTransform = startingCameraTransform;
 
@@ -169,6 +171,8 @@ public class storeGMScript : MonoBehaviour
 
             whichView = 1;
 
+            shopScript.setAllViewsInactive();
+
             //disableAllCameras();
             //mainCamera.enabled = true;
         } else if (Input.GetKeyDown(KeyCode.Keypad2))
@@ -177,6 +181,8 @@ public class storeGMScript : MonoBehaviour
             targetTransform = rightCameraTransform;
 
             whichView = 2;
+
+            shopScript.setAllViewsInactive();
 
             //disableAllCameras();
             //clerkCamera.enabled = true;
@@ -188,11 +194,17 @@ public class storeGMScript : MonoBehaviour
 
             whichView = 3;
 
+            shopScript.setAllViewsInactive();
+
             //disableAllCameras();
             //leftCamera.enabled = true;
         } else if (Input.GetKeyDown(KeyCode.Keypad4))
         {
             targetTransform = clerkCameraTransform;
+
+            whichView = 4;
+
+            shopScript.setAllViewsInactive();
 
             //disableAllCameras();
             //rightCamera.enabled = true;
@@ -203,11 +215,15 @@ public class storeGMScript : MonoBehaviour
         if(whichView == 2)
         {
             rightCameraControls();
+
+            shopScript.setYetiView("Jim", 3, "DESC");
         }
         //else if looking at boards
         else if (whichView == 3)
         {
             leftCameraControls();
+
+            shopScript.setBoardView("Rad", 3000000, "DESC32");
         }
 
 
