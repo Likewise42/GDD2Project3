@@ -15,15 +15,6 @@ public class GameScreenScript : MonoBehaviour {
     public Text Score;
 
 
-    #region testVars
-
-    private int coldCash = 0;
-    private int score = 0;
-    private float distance = 0.0f;
-
-
-    #endregion
-
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -47,51 +38,17 @@ public class GameScreenScript : MonoBehaviour {
             }
         }
 
-        #region TestCode
 
-        if (Input.GetKey(KeyCode.C))
-        {
-            coldCash += 1;
-            SetColdCash(coldCash);
-        }
-        if (Input.GetKey(KeyCode.V))
-        {
-            score += 10;
-            SetScore(score);
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            distance -= .01f;
-            if(distance < 0)
-            {
-                distance = 0;
-            }
-            SetDistancePercent(distance);
-        }
-
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            distance += .01f;
-            if (distance > 1)
-            {
-                distance = 1;
-            }
-            SetDistancePercent(distance);
-        }
-
-
-
-        #endregion
+        SetColdCash(YetiGameData.ColdCash);
     }
 
 
-    public void SetScore(int score)
+    public void SetScore(uint score)
     {
         Score.text = "Score: " + score;
     }
 
-    public void SetColdCash(int coldCash)
+    public void SetColdCash(uint coldCash)
     {
         Coldcash.text = "Cold Cash: " + coldCash;
     }

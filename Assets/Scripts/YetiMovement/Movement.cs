@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
-{
+public class Movement : MonoBehaviour {
 
     private Vector3 acceleration;
     private Vector3 velocity;
@@ -21,6 +20,11 @@ public class Movement : MonoBehaviour
 
     private float lastJumpForce;
 
+    private float sideSpeed;
+    private int jumps;
+    private float jumpSpeed;
+
+    private Snowboard sb;
     private bool collidingWithRamp;
     private bool justLeftRamp;
 
@@ -36,6 +40,12 @@ public class Movement : MonoBehaviour
         collidingWithRamp = false;
         justLeftRamp = false;
         jump = false;
+
+        sb = gameObject.GetComponentInChildren<Snowboard>();
+
+        sideSpeed = sb.sideSpeed;
+        jumpSpeed = sb.jumpSpeed;
+        jumps = sb.jumps;
     }
 
     // Update is called once per frame
@@ -47,38 +57,45 @@ public class Movement : MonoBehaviour
         // w key
         if (Input.GetKeyDown("w"))
         {
-            acceleration += new Vector3(0, 2, 0);
-            wDown = true;
-            jump = true;
+            if(jumps > 0)
+            {
+                acceleration += new Vector3(0, jumpSpeed, 0);
+                wDown = true;
+                jump = true;
+                jumps--;
+            }
         }
         if (Input.GetKeyUp("w"))
         {
-            acceleration -= new Vector3(0, 2, 0);
-            wDown = false;
-            jump = false;
+            if (wDown)
+            {
+                acceleration -= new Vector3(0, jumpSpeed, 0);
+                wDown = false;
+                jump = false;
+            }
         }
 
         // d key
         if (Input.GetKeyDown("d"))
         {
-            acceleration += new Vector3(1, 0, 0);
+            acceleration += new Vector3(0, 0, sideSpeed);
             dDown = true;
         }
         if (Input.GetKeyUp("d"))
         {
-            acceleration -= new Vector3(1, 0, 0);
+            acceleration -= new Vector3(0, 0, sideSpeed);
             dDown = false;
         }
 
         // a key
         if (Input.GetKeyDown("a"))
         {
-            acceleration += new Vector3(-1, 0, 0);
+            acceleration += new Vector3(0, 0, -sideSpeed);
             aDown = true;
         }
         if (Input.GetKeyUp("a"))
         {
-            acceleration -= new Vector3(-1, 0, 0);
+            acceleration -= new Vector3(0, 0, -sideSpeed);
             aDown = false;
         }
 
@@ -131,12 +148,12 @@ public class Movement : MonoBehaviour
         // left and right boundaries
         if (transform.position.x > xStart + boundaryLength)
         {
-            Vector3 overflowVec = new Vector3(-1 * (transform.position.x - (xStart + boundaryLength)), 0, 0);
+            Vector3 overflowVec = new Vector3(0, 0, -1 * (transform.position.x - (xStart + boundaryLength)));
             transform.Translate(overflowVec);
         }
         else if (transform.position.x < xStart - boundaryLength)
         {
-            Vector3 overflowVec = new Vector3(-1 * (transform.position.x + (xStart + boundaryLength)), 0, 0);
+            Vector3 overflowVec = new Vector3(0, 0, -1 * (transform.position.x + (xStart + boundaryLength)));
             transform.Translate(overflowVec);
         }
 

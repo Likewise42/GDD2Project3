@@ -12,10 +12,13 @@ public class LevelManager : MonoBehaviour {
     public const int LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
     
     private int obstacleSpawnTimer;
+    private uint gameEndTimer;
     private int rampSpawnTimer;
     private int levelEndSpawnTimer;
+    private uint score;
     private bool stopSpawning;
 
+    public GameScreenScript gameScreen;
     public GameObject SpawnerObj;
     private LevelSpawner spawner;
 
@@ -55,6 +58,8 @@ public class LevelManager : MonoBehaviour {
             obstacleSpawnTimer++;
             rampSpawnTimer++;
             levelEndSpawnTimer++;
+
+            gameScreen.SetDistancePercent((float)levelEndSpawnTimer / (float)LEVEL_END_SPAWN_INTERVAL);
         }
 	}
 
@@ -89,5 +94,17 @@ public class LevelManager : MonoBehaviour {
         }
 
         return false;
+    }
+
+    void addColdCash(uint amount)
+    {
+        YetiGameData.ColdCash += amount;
+        gameScreen.SetColdCash(YetiGameData.ColdCash);
+    }
+
+    void addScore(uint score)
+    {
+        this.score += score;
+        gameScreen.SetScore(score);
     }
 }
