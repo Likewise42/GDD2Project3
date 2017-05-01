@@ -26,7 +26,9 @@ public class Movement : MonoBehaviour {
 
     private Snowboard sb;
     private bool collidingWithRamp;
+    private bool collidingWithObstacle;
     private bool justLeftRamp;
+    private bool finishedSpinningOut;
 
 
     // Use this for initialization
@@ -100,7 +102,6 @@ public class Movement : MonoBehaviour {
         }
 
 
-        Debug.Log("yPos: " + transform.position.y + " yStart: " + yStart);
         // jumping
         if (transform.position.y > yStart) // if they are above the 'gound' apply gravity
         {
@@ -112,8 +113,6 @@ public class Movement : MonoBehaviour {
             transform.position = new Vector3(transform.position.x, yStart, transform.position.z);
             velocity.y = 0f;
             acceleration.y = 0f;
-            //velocity.y += lastJumpForce;
-            //lastJumpForce = 0;
         }
 
         // applies gravity
@@ -125,20 +124,36 @@ public class Movement : MonoBehaviour {
         
 
         // ramp collision resolution
-        if (collidingWithRamp == true)
+        if (collidingWithRamp)
         {
             Debug.Log("Colliding with ramp");
-            //acceleration.y += 0.5f;
             transform.Translate(new Vector3(0, 0.5f, 0));
         }
         else if(!collidingWithRamp && justLeftRamp)
         {
             print("just left ramp");
-            acceleration.y += world.GetComponent<WorldSpin>().speed / 10f + (transform.position.y - yStart) / 10f;
+            acceleration.y += world.GetComponent<WorldSpin>().speed / 9f + (transform.position.y - yStart) / 9f;
             justLeftRamp = false;
         }
 
+        // obstacle slowing
+        /*if(collidingWithObstacle)
+        {
+            world.GetComponent<WorldSpin>().Slow();
+        }*/
+        if (!finishedSpinningOut)
+        {
+            if (world.GetComponent<WorldSpin>().speed > 3f /* The speed you slow to upon hitting a rock */)
+            {
+                world.GetComponent<WorldSpin>().Slow();
+            }
+            else
+            {
+                finishedSpinningOut = true;
+            }
+        }
         
+
         // changes velocity
         velocity += acceleration;
 
@@ -166,7 +181,12 @@ public class Movement : MonoBehaviour {
     void CollideWithObstacle()
     {
         Debug.Log("Hit an obstacle");
-        world.GetComponent<WorldSpin>().Slow();
+        finishedSpinningOut = false;
+    }
+    void ExitCollideWithObstacle()
+    {
+        Debug.Log("Exiting ramp");
+        collidingWithObstacle = false;
     }
 
     void CollideWithRamp()
@@ -180,7 +200,11 @@ public class Movement : MonoBehaviour {
         Debug.Log("Exiting ramp");
         collidingWithRamp = false;
         justLeftRamp = true;
-        //velocity.y += 1f;
+    }
+
+    void CollideWithColdCash()
+    {
+        Debug.Log("Hit ColdCash");
     }
 
     void CollideWithLevelEnd()
@@ -203,6 +227,10 @@ public class Movement : MonoBehaviour {
         {
             CollideWithLevelEnd();
         }
+        else if (otherObj.CompareTag("ColdCash"))
+        {
+            CollideWithColdCash();
+        }
     }
 
     void OnTriggerExit(Collider other)
@@ -211,6 +239,10 @@ public class Movement : MonoBehaviour {
         if (otherObj.CompareTag("Ramp"))
         {
             ExitCollideWithRamp();
+        }
+        if (otherObj.CompareTag("Obstacle"))
+        {
+            ExitCollideWithObstacle();
         }
     }
 
