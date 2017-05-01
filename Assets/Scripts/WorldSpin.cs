@@ -29,7 +29,7 @@ public class WorldSpin : MonoBehaviour {
             speed = maxSpeed;
         }
 
-        cam.transform.position = new Vector3(cam.transform.position.x, camOriginal.y + (speed / 2), camOriginal.z - (speed * 2));
+        cam.transform.position = new Vector3(cam.transform.position.x, camOriginal.y + 7 /*(speed / 2)*/, camOriginal.z - 20 /*(speed * 2) */);
 
         if (Input.GetKey("e"))
         {

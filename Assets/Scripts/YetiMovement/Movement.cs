@@ -21,8 +21,8 @@ public class Movement : MonoBehaviour {
     private float lastJumpForce;
 
     private float sideSpeed;
-    private int jumps;
     private float jumpSpeed;
+
 
     private Snowboard sb;
     private bool collidingWithRamp;
@@ -47,7 +47,6 @@ public class Movement : MonoBehaviour {
 
         sideSpeed = sb.sideSpeed;
         jumpSpeed = sb.jumpSpeed;
-        jumps = sb.jumps;
     }
 
     // Update is called once per frame
@@ -55,27 +54,6 @@ public class Movement : MonoBehaviour {
     {
 
         acceleration = Vector3.zero;
-
-        // w key
-        if (Input.GetKeyDown("w"))
-        {
-            if(jumps > 0)
-            {
-                acceleration += new Vector3(0, jumpSpeed, 0);
-                wDown = true;
-                jump = true;
-                jumps--;
-            }
-        }
-        if (Input.GetKeyUp("w"))
-        {
-            if (wDown)
-            {
-                acceleration -= new Vector3(0, jumpSpeed, 0);
-                wDown = false;
-                jump = false;
-            }
-        }
 
         // d key
         if (Input.GetKeyDown("d"))
@@ -128,12 +106,14 @@ public class Movement : MonoBehaviour {
         {
             Debug.Log("Colliding with ramp");
             transform.Translate(new Vector3(0, 0.5f, 0));
+            jump = true;
         }
         else if(!collidingWithRamp && justLeftRamp)
         {
             print("just left ramp");
             acceleration.y += world.GetComponent<WorldSpin>().speed / 9f + (transform.position.y - yStart) / 9f;
             justLeftRamp = false;
+            jump = false;
         }
 
         // obstacle slowing
