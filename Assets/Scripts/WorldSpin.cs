@@ -39,6 +39,7 @@ public class WorldSpin : MonoBehaviour {
 
     public void Slow()
     {
-        speed = speed * .3f;
+        speed = speed * .95f;
+        speed -= 0.2f;
     }
 }
