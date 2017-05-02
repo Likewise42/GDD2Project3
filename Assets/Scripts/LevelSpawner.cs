@@ -11,9 +11,13 @@ public class LevelSpawner : MonoBehaviour {
     public GameObject levelEndPrefab;
     public GameObject coldCashPrefab;
 
+    public GameObject slalomFlagPrefab;
+    public GameObject slalomCheckpointPrefab;
+
     private List<GameObject> obstacles;
     private List<GameObject> ramps;
     private List<GameObject> coldcash;
+    private List<GameObject> slalomObjs;
     private GameObject levelObj;
     private Vector3 startPos;
     private Quaternion startRot;
@@ -24,6 +28,7 @@ public class LevelSpawner : MonoBehaviour {
         obstacles = new List<GameObject>();
         ramps = new List<GameObject>();
         coldcash = new List<GameObject>();
+        slalomObjs = new List<GameObject>();
         startPos = gameObject.transform.position;
         startRot = gameObject.transform.rotation;
 
@@ -79,10 +84,27 @@ public class LevelSpawner : MonoBehaviour {
         {
             GameObject coldcashObj = coldcash[i];
             ColdCash coldcashScript = coldcashObj.GetComponent<ColdCash>();
-            if (coldcashScript.ReachedEnd)
+            if (coldcashScript.ReachedEnd || coldcashScript.PickedUp)
             {
                 coldcash.RemoveAt(i);
                 Destroy(coldcashObj);
+            }
+        }
+    }
+
+    /// <summary>
+    /// CullCash iterates over the slalomObjs list and removes any member for whom reachedEnd == true
+    /// </summary>
+    void CullSlalomObjs()
+    {
+        for (int i = slalomObjs.Count - 1; i >= 0; i--)
+        {
+            GameObject slalomObj = slalomObjs[i];
+            Obstacle slalomScript = slalomObj.GetComponent<Obstacle>();
+            if (slalomScript.ReachedEnd)
+            {
+                slalomObjs.RemoveAt(i);
+                Destroy(slalomObj);
             }
         }
     }
@@ -95,6 +117,7 @@ public class LevelSpawner : MonoBehaviour {
         CullObstacles();
         CullRamps();
         CullCash();
+        CullSlalomObjs();
     }
 
     /// <summary>
@@ -196,5 +219,33 @@ public class LevelSpawner : MonoBehaviour {
         levelEnd.transform.parent = levelObj.transform;
 
         return levelEnd;
+    }
+
+    public GameObject CreateSlalomFlag()
+    {
+        GameObject slalomFlag = Instantiate(slalomFlagPrefab,
+                                                    startPos,
+                                                    startRot);
+
+        Vector3 adjust = new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 0, 0);
+        slalomFlag.transform.Translate(adjust);
+        slalomFlag.transform.parent = levelObj.transform;
+
+        slalomObjs.Add(slalomFlag);
+
+        return slalomFlag;
+    }
+
+    public GameObject CreateSlalomCheckpoint()
+    {
+        GameObject slalomCheckpoint = Instantiate(slalomCheckpointPrefab,
+                                                    startPos,
+                                                    startRot);
+        
+        slalomCheckpoint.transform.parent = levelObj.transform;
+
+        slalomObjs.Add(slalomCheckpoint);
+
+        return slalomCheckpoint;
     }
 }

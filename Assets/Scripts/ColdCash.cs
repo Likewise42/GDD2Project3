@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class ColdCash : MonoBehaviour {
 
-    public bool reachedEnd;
+    private bool reachedEnd;
+    private bool pickedUp;
 
     public bool ReachedEnd
     {
         get { return reachedEnd; }
+    }
+
+    public bool PickedUp
+    {
+        get { return pickedUp; }
     }
 
     // Use this for initialization
@@ -29,6 +35,10 @@ public class ColdCash : MonoBehaviour {
         if (otherObj.CompareTag("Despawner"))
         {
             reachedEnd = true;
+        }
+        else if (otherObj.CompareTag("Player"))
+        {
+            pickedUp = true;
         }
     }
 }

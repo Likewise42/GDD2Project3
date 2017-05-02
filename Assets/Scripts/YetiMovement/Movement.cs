@@ -220,6 +220,14 @@ public class Movement : MonoBehaviour {
         {
             CollideWithColdCash();
         }
+        else if (otherObj.CompareTag("SlalomFlags"))
+        {
+            Debug.Log("Hit slalom!");
+        }
+        else if (otherObj.CompareTag("SlalomCheckpoint"))
+        {
+            Debug.Log("Hit slalom checkpoint!");
+        }
     }
 
     void OnTriggerExit(Collider other)
