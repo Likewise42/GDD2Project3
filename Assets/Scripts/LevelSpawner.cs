@@ -9,9 +9,11 @@ public class LevelSpawner : MonoBehaviour {
     public GameObject obstaclePrefab;
     public GameObject rampPrefab;
     public GameObject levelEndPrefab;
+    public GameObject coldCashPrefab;
 
     private List<GameObject> obstacles;
     private List<GameObject> ramps;
+    private List<GameObject> coldcash;
     private GameObject levelObj;
     private Vector3 startPos;
     private Quaternion startRot;
@@ -21,6 +23,7 @@ public class LevelSpawner : MonoBehaviour {
     {
         obstacles = new List<GameObject>();
         ramps = new List<GameObject>();
+        coldcash = new List<GameObject>();
         startPos = gameObject.transform.position;
         startRot = gameObject.transform.rotation;
 
@@ -68,12 +71,30 @@ public class LevelSpawner : MonoBehaviour {
     }
 
     /// <summary>
+    /// CullCash iterates over the coldcash list and removes any member for whom reachedEnd == true
+    /// </summary>
+    void CullCash()
+    {
+        for (int i = coldcash.Count - 1; i >= 0; i--)
+        {
+            GameObject coldcashObj = coldcash[i];
+            ColdCash coldcashScript = coldcashObj.GetComponent<ColdCash>();
+            if (coldcashScript.ReachedEnd)
+            {
+                coldcash.RemoveAt(i);
+                Destroy(coldcashObj);
+            }
+        }
+    }
+
+    /// <summary>
     /// CullLists is a convenience method so we can call a single method to cull all lists
     /// </summary>
     void CullObjects()
     {
         CullObstacles();
         CullRamps();
+        CullCash();
     }
 
     /// <summary>
@@ -101,6 +122,7 @@ public class LevelSpawner : MonoBehaviour {
         // Randomize obstacle's starting x position
         Vector3 obstacleStartPos = startPos;
         obstacleStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
+        obstacleStartPos.y += 3;
 
         newObstacle.transform.position = obstacleStartPos;
         newObstacle.transform.parent = levelObj.transform;
@@ -111,9 +133,9 @@ public class LevelSpawner : MonoBehaviour {
     }
 
     /// <summary>
-    /// CreateaRamp creates an instance of the ramp prefab defined in the spawner
+    /// CreateRamp creates an instance of the ramp prefab defined in the spawner
     /// </summary>
-    /// <returns>A new obstacle GameObject</returns>
+    /// <returns>A new ramp GameObject</returns>
     public GameObject CreateRamp()
     {
         GameObject newRamp = Instantiate(rampPrefab,
@@ -123,6 +145,7 @@ public class LevelSpawner : MonoBehaviour {
         // Randomize obstacle's starting x position
         Vector3 rampStartPos = startPos;
         rampStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
+        rampStartPos.y += 3;
 
         newRamp.transform.position = rampStartPos;
         newRamp.transform.parent = levelObj.transform;
@@ -132,6 +155,33 @@ public class LevelSpawner : MonoBehaviour {
         return newRamp;
     }
 
+    /// <summary>
+    /// CreateColdCash creates an instance of the coldcash prefab defined in the spawner
+    /// </summary>
+    /// <returns>A new ColdCash GameObject</returns>
+    public GameObject CreateColdCash()
+    {
+        GameObject newCash = Instantiate(coldCashPrefab,
+                                                startPos,
+                                                startRot);
+
+        // Randomize obstacle's starting x position
+        Vector3 cashStartPos = startPos;
+        cashStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
+        cashStartPos.y += 3;
+
+        newCash.transform.position = cashStartPos;
+        newCash.transform.parent = levelObj.transform;
+
+        coldcash.Add(newCash);
+
+        return newCash;
+    }
+
+    /// <summary>
+    /// CreateLevelEnd creates an instance of the level end prefab defined in the spawner
+    /// </summary>
+    /// <returns>A new level end GameObject</returns>
     public GameObject CreateLevelEnd()
     {
         GameObject levelEnd = Instantiate(levelEndPrefab,
@@ -140,7 +190,7 @@ public class LevelSpawner : MonoBehaviour {
 
         // Randomize obstacle's starting x position
         Vector3 levelEndStartPos = startPos;
-        levelEndStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
+        levelEndStartPos.y += 3;
 
         levelEnd.transform.position = levelEndStartPos;
         levelEnd.transform.parent = levelObj.transform;

@@ -9,11 +9,13 @@ public class LevelManager : MonoBehaviour {
 
     public const int OBSTACLE_SPAWN_INTERVAL = 120;
     public const int RAMP_SPAWN_INTERVAL = 120;
+    public const int CASH_SPAWN_INTERVAL = 80;
     public const int LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
     
     private int obstacleSpawnTimer;
     private uint gameEndTimer;
     private int rampSpawnTimer;
+    private int cashSpawnTimer;
     private int levelEndSpawnTimer;
     private uint score;
     private bool stopSpawning;
@@ -27,6 +29,7 @@ public class LevelManager : MonoBehaviour {
         // Start timer a little bit along
         obstacleSpawnTimer = OBSTACLE_SPAWN_INTERVAL / 2;
         rampSpawnTimer = RAMP_SPAWN_INTERVAL / 2 - 10;
+        cashSpawnTimer = 0;
         levelEndSpawnTimer = 0;
         stopSpawning = false;
 
@@ -55,8 +58,14 @@ public class LevelManager : MonoBehaviour {
                 spawner.CreateRamp();
             }
 
+            if (ShouldSpawnCash())
+            {
+                spawner.CreateColdCash();
+            }
+
             obstacleSpawnTimer++;
             rampSpawnTimer++;
+            cashSpawnTimer++;
             levelEndSpawnTimer++;
 
             gameScreen.SetDistancePercent((float)levelEndSpawnTimer / (float)LEVEL_END_SPAWN_INTERVAL);
@@ -65,7 +74,7 @@ public class LevelManager : MonoBehaviour {
 
     bool ShouldSpawnObstacle()
     {
-        if (obstacleSpawnTimer == OBSTACLE_SPAWN_INTERVAL)
+        if (obstacleSpawnTimer >= OBSTACLE_SPAWN_INTERVAL)
         {
             obstacleSpawnTimer = 0;
             return true;
@@ -76,7 +85,7 @@ public class LevelManager : MonoBehaviour {
 
     bool ShouldSpawnRamp()
     {
-        if (rampSpawnTimer == RAMP_SPAWN_INTERVAL)
+        if (rampSpawnTimer >= RAMP_SPAWN_INTERVAL)
         {
             rampSpawnTimer = 0;
             return true;
@@ -85,9 +94,20 @@ public class LevelManager : MonoBehaviour {
         return false;
     }
 
+    bool ShouldSpawnCash()
+    {
+        if (cashSpawnTimer >= CASH_SPAWN_INTERVAL)
+        {
+            cashSpawnTimer = 0;
+            return true;
+        }
+
+        return false;
+    }
+
     bool ShouldSpawnLevelEnd()
     {
-        if (levelEndSpawnTimer == LEVEL_END_SPAWN_INTERVAL)
+        if (levelEndSpawnTimer >= LEVEL_END_SPAWN_INTERVAL)
         {
             levelEndSpawnTimer = 0;
             return true;

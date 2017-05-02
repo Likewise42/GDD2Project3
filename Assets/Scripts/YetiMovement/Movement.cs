@@ -187,6 +187,11 @@ public class Movement : MonoBehaviour {
         Debug.Log("Hit ColdCash");
     }
 
+    void CollideWithCash()
+    {
+        Debug.Log("Get dat green");
+    }
+
     void CollideWithLevelEnd()
     {
         Debug.Log("Hit end of level");
@@ -202,6 +207,10 @@ public class Movement : MonoBehaviour {
         else if (otherObj.CompareTag("Ramp"))
         {
             CollideWithRamp();
+        }
+        else if (otherObj.CompareTag("ColdCash"))
+        {
+            CollideWithCash();
         }
         else if (otherObj.CompareTag("LevelEnd"))
         {
