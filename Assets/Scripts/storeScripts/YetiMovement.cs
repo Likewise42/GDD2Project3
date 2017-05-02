@@ -18,17 +18,6 @@ public class YetiMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey(run))
-        {
-            isRunning = true;
-            speed = 4;
-        }
-        else
-        {
-            isRunning = false;
-            speed = 2;
-        }
-
         //forward
         if (Input.GetKey("w"))
         {
@@ -44,6 +33,19 @@ public class YetiMovement : MonoBehaviour {
         else
         {
             isWalking = false;
+        }
+
+        //running check
+        //must be walking to run
+        if (Input.GetKey(run) && isWalking)
+        {
+            isRunning = true;
+            speed = 4;
+        }
+        else
+        {
+            isRunning = false;
+            speed = 2;
         }
 
         //rotate clockwise

@@ -6,7 +6,7 @@ public class WorldSpin : MonoBehaviour {
 
     public GameObject player;
     public Camera cam;
-    private float speed;
+    public float speed;
     public float maxSpeed;
     public float acceleration;
     private Vector3 camOriginal;
@@ -29,7 +29,7 @@ public class WorldSpin : MonoBehaviour {
             speed = maxSpeed;
         }
 
-        cam.transform.position = new Vector3(cam.transform.position.x, camOriginal.y + (speed / 2), camOriginal.z - (speed * 2));
+        cam.transform.position = new Vector3(cam.transform.position.x, camOriginal.y + 7 /*(speed / 2)*/, camOriginal.z - 20 /*(speed * 2) */);
 
         if (Input.GetKey("e"))
         {
@@ -39,6 +39,7 @@ public class WorldSpin : MonoBehaviour {
 
     public void Slow()
     {
-        speed = speed * .7f;
+        speed = speed * .95f;
+        speed -= 0.2f;
     }
 }
