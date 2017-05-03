@@ -12,6 +12,8 @@ public class yetiShop : MonoBehaviour {
     public Text descText;
 
     public GameObject yetiViewPanel;
+    public GameObject viewsPanel;
+    public GameObject exitPanel;
 
     public Text boardNameText;
     public Text boardCostText;
@@ -19,9 +21,25 @@ public class yetiShop : MonoBehaviour {
 
     public GameObject boardViewPanel;
 
+
+
     public void Update()
     {
         coldCashText.text = "Cold Cash: " + YetiGameData.ColdCash;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (exitPanel.activeInHierarchy)
+            {
+                exitPanel.SetActive(false);
+                viewsPanel.SetActive(true);
+            }
+            else
+            {
+                exitPanel.SetActive(true);
+                viewsPanel.SetActive(false);
+            }
+        }
     }
 
     public void setYetiView(string name, int cost, string description)
@@ -46,6 +64,12 @@ public class yetiShop : MonoBehaviour {
         boardViewPanel.SetActive(false);
     }
 
+
+    public void toggleExitScreen(bool pause)
+    {
+        viewsPanel.SetActive(!pause);
+        exitPanel.SetActive(pause);
+    }
 
 
 
