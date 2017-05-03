@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelSpawner : MonoBehaviour {
     
-    public const int HALF_LEVEL_WIDTH = 40;
+    public const int HALF_LEVEL_WIDTH = 37;
 
     public GameObject obstaclePrefab;
     public GameObject rampPrefab;
