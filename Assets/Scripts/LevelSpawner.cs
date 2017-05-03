@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelSpawner : MonoBehaviour {
     
-    public const int HALF_LEVEL_WIDTH = 45;
+    public const int HALF_LEVEL_WIDTH = 40;
 
     public GameObject obstaclePrefab;
     public GameObject rampPrefab;
@@ -227,7 +227,7 @@ public class LevelSpawner : MonoBehaviour {
                                                     startPos,
                                                     startRot);
 
-        Vector3 adjust = new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 0, 0);
+        Vector3 adjust = new Vector3(Random.Range(-0.8f, 0.8f) * HALF_LEVEL_WIDTH, 0, 0);
         slalomFlag.transform.Translate(adjust);
         slalomFlag.transform.parent = levelObj.transform;
 

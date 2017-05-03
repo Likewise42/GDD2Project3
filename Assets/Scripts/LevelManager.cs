@@ -11,7 +11,7 @@ public class LevelManager : MonoBehaviour {
     public const int RAMP_SPAWN_INTERVAL = 120;
     public const int CASH_SPAWN_INTERVAL = 80;
     public const int TIME_TO_SLALOM = 600;
-    public const int LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
+    public const int LEVEL_END_SPAWN_INTERVAL = 500;   // 1 minute level
 
     // Slalom-specific constants
     public const int NUMBER_OF_SLALOMS = 10;
