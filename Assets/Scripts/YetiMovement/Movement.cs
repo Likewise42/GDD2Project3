@@ -18,6 +18,8 @@ public class Movement : MonoBehaviour {
     public float boundaryLength;
     public GameObject world;
 
+    public LevelManager lManager;
+
     private float lastJumpForce;
 
     private float sideSpeed;
@@ -184,14 +186,10 @@ public class Movement : MonoBehaviour {
 
     void CollideWithColdCash()
     {
-        Debug.Log("Hit ColdCash");
+        YetiGameData.ColdCash += (uint)YetiGameData.coldCashMultiplier;
+        lManager.addScore(100);
     }
-
-    void CollideWithCash()
-    {
-        Debug.Log("Get dat green");
-    }
-
+    
     void CollideWithLevelEnd()
     {
         Debug.Log("Hit end of level");
@@ -208,10 +206,6 @@ public class Movement : MonoBehaviour {
         {
             CollideWithRamp();
         }
-        else if (otherObj.CompareTag("ColdCash"))
-        {
-            CollideWithCash();
-        }
         else if (otherObj.CompareTag("LevelEnd"))
         {
             CollideWithLevelEnd();
@@ -222,11 +216,11 @@ public class Movement : MonoBehaviour {
         }
         else if (otherObj.CompareTag("SlalomFlags"))
         {
-            Debug.Log("Hit slalom!");
+            lManager.hitSlalom = true;
         }
         else if (otherObj.CompareTag("SlalomCheckpoint"))
         {
-            Debug.Log("Hit slalom checkpoint!");
+            lManager.procSlalom();
         }
     }
 

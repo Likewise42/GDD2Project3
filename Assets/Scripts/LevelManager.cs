@@ -11,13 +11,16 @@ public class LevelManager : MonoBehaviour {
     public const int RAMP_SPAWN_INTERVAL = 120;
     public const int CASH_SPAWN_INTERVAL = 80;
     public const int TIME_TO_SLALOM = 600;
-    public const int LEVEL_END_SPAWN_INTERVAL = 500;   // 1 minute level
+    public const int LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
 
     // Slalom-specific constants
     public const int NUMBER_OF_SLALOMS = 10;
     private const int SLALOM_CHECKPOINT_TIMER = 10;
     public const int TIME_BETWEEN_SLALOMS = 120;
 
+    public const float SLALOM_MULT_DELTA = .05f;
+
+    public uint slalomBasePoints = 100;
     private uint gameEndTimer;
     private int obstacleSpawnTimer;
     private int rampSpawnTimer;
@@ -29,9 +32,11 @@ public class LevelManager : MonoBehaviour {
     private bool canSpawnSlalomCheckpoint;
 
     private uint score;
+    private float slalomMultiplier = 0;
+    private float scoreMultiplier = 1;
     private bool stopSpawning;
     private bool slalomEvent;
-    private int currentSlalomCount;
+    private int currentSlalomCheckpointCount;
 
     public GameScreenScript gameScreen;
     public GameObject SpawnerObj;
@@ -45,7 +50,7 @@ public class LevelManager : MonoBehaviour {
         cashSpawnTimer = 0;
         levelEndSpawnTimer = 0;
         slalomTimer = 0;
-        currentSlalomCount = 0;
+        currentSlalomCheckpointCount = 0;
 
         slalomEvent = false;
         stopSpawning = false;
@@ -59,13 +64,12 @@ public class LevelManager : MonoBehaviour {
         if (slalomEvent)
         {
             //  --  Spawning    --
-            if (currentSlalomCount <= NUMBER_OF_SLALOMS)
+            if (currentSlalomCheckpointCount <= NUMBER_OF_SLALOMS)
             {
                 if (slalomTimer == 0)
                 {
                     spawner.CreateSlalomFlag();
                     canSpawnSlalomCheckpoint = true;
-                    currentSlalomCount++;
                     slalomTimer++;
                 }
                 else if (slalomTimer >= TIME_BETWEEN_SLALOMS)
@@ -76,6 +80,7 @@ public class LevelManager : MonoBehaviour {
                 {
                     spawner.CreateSlalomCheckpoint();
                     canSpawnSlalomCheckpoint = false;   // So we only spawn 1 checkpoint per slalom
+                    currentSlalomCheckpointCount++;
                 }
                 else
                 {
@@ -185,15 +190,25 @@ public class LevelManager : MonoBehaviour {
         return false;
     }
 
-    void addColdCash(uint amount)
+    public void addScore(uint score)
     {
-        YetiGameData.ColdCash += amount;
-        gameScreen.SetColdCash(YetiGameData.ColdCash);
+        this.score += (uint)(scoreMultiplier * score);
+        gameScreen.SetScore(this.score);
     }
 
-    void addScore(uint score)
+    public void procSlalom()
     {
-        this.score += score;
-        gameScreen.SetScore(score);
+        if (hitSlalom)
+        {
+            addScore(slalomBasePoints);
+            scoreMultiplier += SLALOM_MULT_DELTA;
+            slalomMultiplier += SLALOM_MULT_DELTA;
+            hitSlalom = false;
+        }
+        else
+        {
+            scoreMultiplier -= slalomMultiplier;
+            slalomMultiplier = 0;
+        }
     }
 }
