@@ -18,6 +18,8 @@ public class Movement : MonoBehaviour {
     public float boundaryLength;
     public GameObject world;
 
+    private float rotation;
+
     public LevelManager lManager;
 
     private float lastJumpForce;
@@ -44,40 +46,42 @@ public class Movement : MonoBehaviour {
         collidingWithRamp = false;
         justLeftRamp = false;
         jump = false;
+        finishedSpinningOut = false;
 
         sb = gameObject.GetComponentInChildren<Snowboard>();
 
         sideSpeed = sb.sideSpeed;
         jumpSpeed = sb.jumpSpeed;
+
+        rotation = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-
         acceleration = Vector3.zero;
 
         // d key
         if (Input.GetKeyDown("d"))
         {
-            acceleration += new Vector3(0, 0, sideSpeed);
+            acceleration += new Vector3(sideSpeed, 0, 0);
             dDown = true;
         }
         if (Input.GetKeyUp("d"))
         {
-            acceleration -= new Vector3(0, 0, sideSpeed);
+            acceleration -= new Vector3(sideSpeed, 0, 0);
             dDown = false;
         }
 
         // a key
         if (Input.GetKeyDown("a"))
         {
-            acceleration += new Vector3(0, 0, -sideSpeed);
+            acceleration += new Vector3(-sideSpeed, 0, 0);
             aDown = true;
         }
         if (Input.GetKeyUp("a"))
         {
-            acceleration -= new Vector3(0, 0, -sideSpeed);
+            acceleration -= new Vector3(-sideSpeed, 0, 0);
             aDown = false;
         }
 
@@ -125,14 +129,18 @@ public class Movement : MonoBehaviour {
         }*/
         if (!finishedSpinningOut)
         {
-            if (world.GetComponent<WorldSpin>().speed > 3f /* The speed you slow to upon hitting a rock */)
+            world.GetComponent<WorldSpin>().Slow();
+            rotation += 10f;
+            if (rotation >= 720)
             {
-                world.GetComponent<WorldSpin>().Slow();
-            }
-            else
-            {
+                rotation = 0;
                 finishedSpinningOut = true;
             }
+            gameObject.transform.Rotate(new Vector3(0, rotation * Time.deltaTime, 0), Space.Self);
+        }
+        else
+        {
+            gameObject.transform.eulerAngles = new Vector3(0, 90, 0);
         }
         
 
@@ -140,18 +148,18 @@ public class Movement : MonoBehaviour {
         velocity += acceleration;
 
         // update position every frame
-        transform.Translate((velocity * Time.deltaTime) * 15);
+        transform.Translate((velocity * Time.deltaTime) * 15, Space.World);
 
         // left and right boundaries
         if (transform.position.x > xStart + boundaryLength)
         {
-            Vector3 overflowVec = new Vector3(0, 0, -1 * (transform.position.x - (xStart + boundaryLength)));
-            transform.Translate(overflowVec);
+            Vector3 overflowVec = new Vector3(-1 * (transform.position.x - (xStart + boundaryLength)), 0, 0);
+            transform.Translate(overflowVec, Space.World);
         }
         else if (transform.position.x < xStart - boundaryLength)
         {
-            Vector3 overflowVec = new Vector3(0, 0, -1 * (transform.position.x + (xStart + boundaryLength)));
-            transform.Translate(overflowVec);
+            Vector3 overflowVec = new Vector3(-1 * (transform.position.x + (xStart + boundaryLength)), 0, 0);
+            transform.Translate(overflowVec, Space.World);
         }
 
 
@@ -162,7 +170,6 @@ public class Movement : MonoBehaviour {
 
     void CollideWithObstacle()
     {
-        Debug.Log("Hit an obstacle");
         finishedSpinningOut = false;
     }
     void ExitCollideWithObstacle()
