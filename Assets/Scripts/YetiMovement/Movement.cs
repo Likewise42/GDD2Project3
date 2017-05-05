@@ -46,7 +46,7 @@ public class Movement : MonoBehaviour {
         collidingWithRamp = false;
         justLeftRamp = false;
         jump = false;
-        finishedSpinningOut = false;
+        finishedSpinningOut = true;
 
         sb = gameObject.GetComponentInChildren<Snowboard>();
 
