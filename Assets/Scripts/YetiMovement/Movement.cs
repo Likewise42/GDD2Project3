@@ -46,7 +46,7 @@ public class Movement : MonoBehaviour {
         collidingWithRamp = false;
         justLeftRamp = false;
         jump = false;
-        finishedSpinningOut = false;
+        finishedSpinningOut = true;
 
         sb = gameObject.GetComponentInChildren<Snowboard>();
 
@@ -193,13 +193,13 @@ public class Movement : MonoBehaviour {
 
     void CollideWithColdCash()
     {
-        YetiGameData.ColdCash += (uint)YetiGameData.coldCashMultiplier;
-        lManager.addScore(100);
+        lManager.addColdCash(1);
     }
     
     void CollideWithLevelEnd()
     {
-        Debug.Log("Hit end of level");
+        lManager.EndLevel();
+
     }
 
     void OnTriggerEnter(Collider other)
