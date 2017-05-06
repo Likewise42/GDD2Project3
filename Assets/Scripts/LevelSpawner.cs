@@ -14,6 +14,10 @@ public class LevelSpawner : MonoBehaviour {
     public GameObject slalomFlagPrefab;
     public GameObject slalomCheckpointPrefab;
 
+    public GameObject BoostPickupPrefab;
+    public GameObject CashPickupPrefab;
+    public GameObject MultiplierPickupPrefab;
+
     private List<GameObject> obstacles;
     private List<GameObject> ramps;
     private List<GameObject> coldcash;
@@ -119,133 +123,62 @@ public class LevelSpawner : MonoBehaviour {
         CullCash();
         CullSlalomObjs();
     }
-
-    /// <summary>
-    /// MoveObject is a helper function to move a given GameObject in the level.
-    ///  Movement amounts are hard-coded in the function appropriate for the level.
-    /// </summary>
-    /// <param name="obst">The GameObject to move</param>
-    void MoveObject(GameObject obst)
-    {
-        Vector3 obstPos = obst.transform.position;
-        obstPos.x += 0.1f;
-        obst.transform.position = obstPos;
-    }
-
-    /// <summary>
-    /// CreateObstacle creates an instance of the obstacle prefab defined in the spawner
-    /// </summary>
-    /// <returns>A new obstacle GameObject</returns>
+    
     public GameObject CreateObstacle()
     {
-        GameObject newObstacle = Instantiate(obstaclePrefab,
-                                                startPos,
-                                                startRot);
-
-        // Randomize obstacle's starting x position
-        Vector3 obstacleStartPos = startPos;
-        obstacleStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
-        obstacleStartPos.y += 3;
-
-        newObstacle.transform.position = obstacleStartPos;
-        newObstacle.transform.parent = levelObj.transform;
-
-        obstacles.Add(newObstacle);
-
-        return newObstacle;
+        return CreateObject(obstaclePrefab,
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 0, 0),
+                            obstacles);
     }
-
-    /// <summary>
-    /// CreateRamp creates an instance of the ramp prefab defined in the spawner
-    /// </summary>
-    /// <returns>A new ramp GameObject</returns>
+    
     public GameObject CreateRamp()
     {
-        GameObject newRamp = Instantiate(rampPrefab,
-                                                startPos,
-                                                startRot);
-
-        // Randomize obstacle's starting x position
-        Vector3 rampStartPos = startPos;
-        rampStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
-        rampStartPos.y += 3;
-
-        newRamp.transform.position = rampStartPos;
-        newRamp.transform.parent = levelObj.transform;
-
-        ramps.Add(newRamp);
-
-        return newRamp;
+        return CreateObject(rampPrefab,
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 0, 0),
+                            ramps);
     }
-
-    /// <summary>
-    /// CreateColdCash creates an instance of the coldcash prefab defined in the spawner
-    /// </summary>
-    /// <returns>A new ColdCash GameObject</returns>
+    
     public GameObject CreateColdCash()
     {
-        GameObject newCash = Instantiate(coldCashPrefab,
-                                                startPos,
-                                                startRot);
-
-        // Randomize obstacle's starting x position
-        Vector3 cashStartPos = startPos;
-        cashStartPos.x += Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
-        cashStartPos.y += 3;
-
-        newCash.transform.position = cashStartPos;
-        newCash.transform.parent = levelObj.transform;
-
-        coldcash.Add(newCash);
-
-        return newCash;
+        return CreateObject(coldCashPrefab,
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 3, 0),
+                            coldcash);
     }
-
-    /// <summary>
-    /// CreateLevelEnd creates an instance of the level end prefab defined in the spawner
-    /// </summary>
-    /// <returns>A new level end GameObject</returns>
+    
     public GameObject CreateLevelEnd()
     {
-        GameObject levelEnd = Instantiate(levelEndPrefab,
-                                                startPos,
-                                                startRot);
-
-        // Randomize obstacle's starting x position
-        Vector3 levelEndStartPos = startPos;
-        levelEndStartPos.y += 3;
-
-        levelEnd.transform.position = levelEndStartPos;
-        levelEnd.transform.parent = levelObj.transform;
-
-        return levelEnd;
+        return CreateObject(levelEndPrefab,
+                            new Vector3(0, 3, 0),
+                            null);
     }
 
     public GameObject CreateSlalomFlag()
     {
-        GameObject slalomFlag = Instantiate(slalomFlagPrefab,
-                                                    startPos,
-                                                    startRot);
-
-        Vector3 adjust = new Vector3(Random.Range(-0.8f, 0.8f) * HALF_LEVEL_WIDTH, 0, 0);
-        slalomFlag.transform.Translate(adjust);
-        slalomFlag.transform.parent = levelObj.transform;
-
-        slalomObjs.Add(slalomFlag);
-
-        return slalomFlag;
+        return CreateObject(slalomFlagPrefab,
+                            new Vector3(Random.Range(-0.8f, 0.8f) * HALF_LEVEL_WIDTH, 0, 0),
+                            slalomObjs);
     }
 
     public GameObject CreateSlalomCheckpoint()
     {
-        GameObject slalomCheckpoint = Instantiate(slalomCheckpointPrefab,
-                                                    startPos,
-                                                    startRot);
-        
-        slalomCheckpoint.transform.parent = levelObj.transform;
-
-        slalomObjs.Add(slalomCheckpoint);
-
-        return slalomCheckpoint;
+        return CreateObject(slalomCheckpointPrefab,
+                            new Vector3(0, 0, 0),
+                            slalomObjs);
     }
+
+    private GameObject CreateObject(GameObject prefab, Vector3 adjustmentVector, List<GameObject> objectList)
+    {
+        GameObject newObject = Instantiate(prefab, startPos, startRot);
+
+        newObject.transform.Translate(adjustmentVector);
+        newObject.transform.parent = levelObj.transform;
+
+        if (objectList != null)
+        {
+            objectList.Add(newObject);
+        }
+
+        return newObject;
+    }
+
 }
