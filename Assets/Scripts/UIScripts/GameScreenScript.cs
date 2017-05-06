@@ -66,15 +66,12 @@ public class GameScreenScript : MonoBehaviour {
         }
     }
 
-    public void EndGameUI(int timeInseconds, int totalScore, int coldCashCollected, bool newHighScore)
+    public void EndGameUI(int timeInseconds, uint totalScore, uint coldCashCollected, bool newHighScore)
     {
         end = true;
         MainPanel.SetActive(false);
         PausePanel.SetActive(false);
-        foreach (GameObject go in ThingsToMakeGoAway)
-        {
-            go.SetActive(false);
-        }
+        MakeGoAway(false);
 
         EndPanel.SetActive(true);
 
@@ -95,19 +92,21 @@ public class GameScreenScript : MonoBehaviour {
         {
             MainPanel.SetActive(false);
             PausePanel.SetActive(true);
-            foreach (GameObject go in ThingsToMakeGoAway)
-            {
-                go.SetActive(false);
-            }
+            MakeGoAway(false);
         }
         else
         {
             MainPanel.SetActive(true);
             PausePanel.SetActive(false);
-            foreach (GameObject go in ThingsToMakeGoAway)
-            {
-                go.SetActive(true);
-            }
+            MakeGoAway(true);
+        }
+    }
+
+    private void MakeGoAway(bool active)
+    {
+        foreach (GameObject go in ThingsToMakeGoAway)
+        {
+            go.SetActive(active);
         }
     }
 

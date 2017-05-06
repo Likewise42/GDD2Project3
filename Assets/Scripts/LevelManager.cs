@@ -30,7 +30,13 @@ public class LevelManager : MonoBehaviour {
 
     public bool hitSlalom;
     private bool canSpawnSlalomCheckpoint;
+    private bool levelRunning = true;
 
+    private float timeInSeconds = 0.0f;
+
+    public uint coldCashScore = 100;
+
+    private uint currentColdCash;
     private uint score;
     private float slalomMultiplier = 0;
     private float scoreMultiplier = 1;
@@ -61,6 +67,13 @@ public class LevelManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+
+        if (!levelRunning)
+        {
+            return;
+        }
+
+        timeInSeconds += Time.deltaTime;
         if (slalomEvent)
         {
             //  --  Spawning    --
@@ -190,10 +203,33 @@ public class LevelManager : MonoBehaviour {
         return false;
     }
 
+    public void EndLevel()
+    {
+        if (!levelRunning)
+        {
+            return;
+        }
+        levelRunning = false;
+        bool nhs = score > YetiGameData.HighScore;
+        gameScreen.EndGameUI((int)timeInSeconds, score, currentColdCash, nhs);
+        if (nhs)
+        {
+            YetiGameData.HighScore = score;
+        }
+
+    }
+
     public void addScore(uint score)
     {
         this.score += (uint)(scoreMultiplier * score);
         gameScreen.SetScore(this.score);
+    }
+
+    public void addColdCash(uint coldCashAmount)
+    {
+        YetiGameData.ColdCash += (uint)YetiGameData.coldCashMultiplier;
+        currentColdCash += coldCashAmount;
+        addScore(coldCashScore);
     }
 
     public void procSlalom()
