@@ -10,13 +10,14 @@ public class LevelManager : MonoBehaviour {
     public const int OBSTACLE_SPAWN_INTERVAL = 120;
     public const int RAMP_SPAWN_INTERVAL = 120;
     public const int CASH_SPAWN_INTERVAL = 80;
+    public const int PICKUP_SPAWN_INTERVAL = 140;
     public const int TIME_TO_SLALOM = 600;
     public const int LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
 
     // Slalom-specific constants
     public const int NUMBER_OF_SLALOMS = 10;
     private const int SLALOM_CHECKPOINT_TIMER = 10;
-    public const int TIME_BETWEEN_SLALOMS = 120;
+    public const int TIME_BETWEEN_SLALOMS = 90;
 
     public const float SLALOM_MULT_DELTA = .05f;
 
@@ -25,6 +26,7 @@ public class LevelManager : MonoBehaviour {
     private int obstacleSpawnTimer;
     private int rampSpawnTimer;
     private int cashSpawnTimer;
+    private int pickupSpawnTimer;
     private int levelEndSpawnTimer;
     private int slalomTimer;
 
@@ -39,7 +41,7 @@ public class LevelManager : MonoBehaviour {
     private uint currentColdCash;
     private uint score;
     private float slalomMultiplier = 0;
-    private float scoreMultiplier = 1;
+    public float scoreMultiplier = 1;
     private bool stopSpawning;
     private bool slalomEvent;
     private int currentSlalomCheckpointCount;
@@ -54,6 +56,7 @@ public class LevelManager : MonoBehaviour {
         obstacleSpawnTimer = OBSTACLE_SPAWN_INTERVAL / 2;
         rampSpawnTimer = RAMP_SPAWN_INTERVAL / 2 - 10;
         cashSpawnTimer = 0;
+        pickupSpawnTimer = 0;
         levelEndSpawnTimer = 0;
         slalomTimer = 0;
         currentSlalomCheckpointCount = 0;
@@ -66,8 +69,7 @@ public class LevelManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-
+        
         if (!levelRunning)
         {
             return;
@@ -136,9 +138,28 @@ public class LevelManager : MonoBehaviour {
                 spawner.CreateColdCash();
             }
 
+            if (ShouldSpawnPickup())
+            {
+                // Randomly choose a pickup to spawn
+                float decision = Random.Range(0, 1.0f);
+                if (decision < 0.33f)
+                {
+                    spawner.CreateBoostPickup();
+                }
+                else if (decision < 0.66f)
+                {
+                    spawner.CreateCashBonusPickup();
+                }
+                else
+                {
+                    spawner.CreateMultiplierPickup();
+                }
+            }
+
             obstacleSpawnTimer++;
             rampSpawnTimer++;
             cashSpawnTimer++;
+            pickupSpawnTimer++;
             levelEndSpawnTimer++;
             slalomTimer++;
 
@@ -197,6 +218,17 @@ public class LevelManager : MonoBehaviour {
         if (levelEndSpawnTimer >= LEVEL_END_SPAWN_INTERVAL)
         {
             levelEndSpawnTimer = 0;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool ShouldSpawnPickup()
+    {
+        if (pickupSpawnTimer >= PICKUP_SPAWN_INTERVAL)
+        {
+            pickupSpawnTimer = 0;
             return true;
         }
 

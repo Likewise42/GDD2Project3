@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelSpawner : MonoBehaviour {
     
-    public const int HALF_LEVEL_WIDTH = 37;
+    public const int HALF_LEVEL_WIDTH = 30;
 
     public GameObject obstaclePrefab;
     public GameObject rampPrefab;
@@ -15,13 +15,14 @@ public class LevelSpawner : MonoBehaviour {
     public GameObject slalomCheckpointPrefab;
 
     public GameObject BoostPickupPrefab;
-    public GameObject CashPickupPrefab;
+    public GameObject CashBonusPickupPrefab;
     public GameObject MultiplierPickupPrefab;
 
     private List<GameObject> obstacles;
     private List<GameObject> ramps;
     private List<GameObject> coldcash;
     private List<GameObject> slalomObjs;
+    private List<GameObject> pickups;
     private GameObject levelObj;
     private Vector3 startPos;
     private Quaternion startRot;
@@ -33,6 +34,7 @@ public class LevelSpawner : MonoBehaviour {
         ramps = new List<GameObject>();
         coldcash = new List<GameObject>();
         slalomObjs = new List<GameObject>();
+        pickups = new List<GameObject>();
         startPos = gameObject.transform.position;
         startRot = gameObject.transform.rotation;
 
@@ -113,6 +115,20 @@ public class LevelSpawner : MonoBehaviour {
         }
     }
 
+    void CullPickups()
+    {
+        for (int i = pickups.Count - 1; i >= 0; i--)
+        {
+            GameObject pickupObj = pickups[i];
+            Pickup pickupScript = pickupObj.GetComponent<Pickup>();
+            if (pickupScript.ReachedEnd || pickupScript.PickedUp)
+            {
+                pickups.RemoveAt(i);
+                Destroy(pickupObj);
+            }
+        }
+    }
+
     /// <summary>
     /// CullLists is a convenience method so we can call a single method to cull all lists
     /// </summary>
@@ -122,6 +138,7 @@ public class LevelSpawner : MonoBehaviour {
         CullRamps();
         CullCash();
         CullSlalomObjs();
+        CullPickups();
     }
     
     public GameObject CreateObstacle()
@@ -155,7 +172,7 @@ public class LevelSpawner : MonoBehaviour {
     public GameObject CreateSlalomFlag()
     {
         return CreateObject(slalomFlagPrefab,
-                            new Vector3(Random.Range(-0.8f, 0.8f) * HALF_LEVEL_WIDTH, 0, 0),
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 0, 0),
                             slalomObjs);
     }
 
@@ -164,6 +181,27 @@ public class LevelSpawner : MonoBehaviour {
         return CreateObject(slalomCheckpointPrefab,
                             new Vector3(0, 0, 0),
                             slalomObjs);
+    }
+
+    public GameObject CreateBoostPickup()
+    {
+        return CreateObject(BoostPickupPrefab,
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 3, 0),
+                            pickups);
+    }
+
+    public GameObject CreateCashBonusPickup()
+    {
+        return CreateObject(CashBonusPickupPrefab,
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 3, 0),
+                            pickups);
+    }
+
+    public GameObject CreateMultiplierPickup()
+    {
+        return CreateObject(MultiplierPickupPrefab,
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 3, 0),
+                            pickups);
     }
 
     private GameObject CreateObject(GameObject prefab, Vector3 adjustmentVector, List<GameObject> objectList)

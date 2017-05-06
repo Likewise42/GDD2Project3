@@ -22,6 +22,11 @@ public class Movement : MonoBehaviour {
 
     public LevelManager lManager;
 
+    // A little janky to have this in player, but. . .
+    public int coldCashMultiplier = 1;
+    public float coldCashBonusTimer = 0;
+    public const int COLD_CASH_BONUS_DURATION = 900; // 15 seconds
+
     private float lastJumpForce;
 
     private float sideSpeed;
@@ -59,6 +64,16 @@ public class Movement : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        // Handle cashbonus real quick, if necessary
+        if (coldCashBonusTimer > 0)
+        {
+            coldCashBonusTimer -= Time.deltaTime;
+            if (coldCashBonusTimer <= 0)
+            {
+                coldCashMultiplier = 1;  // If pickup duration over, reset cold cash to normal values
+            }
+        }
+
         acceleration = Vector3.zero;
 
         // d key
@@ -103,7 +118,6 @@ public class Movement : MonoBehaviour {
         if (applyGrav)
         {
             acceleration.y -= 0.05f;
-            //lastJumpForce += 0.05f;
         }
         
 
@@ -123,10 +137,6 @@ public class Movement : MonoBehaviour {
         }
 
         // obstacle slowing
-        /*if(collidingWithObstacle)
-        {
-            world.GetComponent<WorldSpin>().Slow();
-        }*/
         if (!finishedSpinningOut)
         {
             world.GetComponent<WorldSpin>().Slow();
@@ -162,28 +172,15 @@ public class Movement : MonoBehaviour {
             transform.Translate(overflowVec, Space.World);
         }
 
-
-        //collisionDetection();
-        
         gameObject.GetComponent<Animator>().SetBool("Jumping", jump);
     }
 
-    void CollideWithObstacle()
-    {
-        finishedSpinningOut = false;
-    }
     void ExitCollideWithObstacle()
     {
         Debug.Log("Exiting ramp");
         collidingWithObstacle = false;
     }
-
-    void CollideWithRamp()
-    {
-        Debug.Log("Hit a ramp");
-        collidingWithRamp = true;
-    }
-
+    
     void ExitCollideWithRamp()
     {
         Debug.Log("Exiting ramp");
@@ -193,41 +190,50 @@ public class Movement : MonoBehaviour {
 
     void CollideWithColdCash()
     {
+        int coldCashAmt = 1 * coldCashMultiplier;
         lManager.addColdCash(1);
     }
     
-    void CollideWithLevelEnd()
+    void CollideWithCashBonus()
     {
-        lManager.EndLevel();
-
+        coldCashMultiplier = 2;
+        coldCashBonusTimer = COLD_CASH_BONUS_DURATION;
     }
 
     void OnTriggerEnter(Collider other)
     {
         GameObject otherObj = other.gameObject;
-        if (otherObj.CompareTag("Obstacle"))
+        switch (otherObj.tag)
         {
-            CollideWithObstacle();
-        }
-        else if (otherObj.CompareTag("Ramp"))
-        {
-            CollideWithRamp();
-        }
-        else if (otherObj.CompareTag("LevelEnd"))
-        {
-            CollideWithLevelEnd();
-        }
-        else if (otherObj.CompareTag("ColdCash"))
-        {
-            CollideWithColdCash();
-        }
-        else if (otherObj.CompareTag("SlalomFlags"))
-        {
-            lManager.hitSlalom = true;
-        }
-        else if (otherObj.CompareTag("SlalomCheckpoint"))
-        {
-            lManager.procSlalom();
+            case "Obstacle":
+                finishedSpinningOut = false;
+                break;
+            case "Ramp":
+                collidingWithRamp = true;
+                break;
+            case "LevelEnd":
+                lManager.EndLevel();
+                break;
+            case "ColdCash":
+                CollideWithColdCash();
+                break;
+            case "SlalomFlags":
+                lManager.hitSlalom = true;
+                break;
+            case "SlalomCheckpoint":
+                lManager.procSlalom();
+                break;
+            case "Pickup_Boost":
+                // Boost logic goes here - remember to add some sort of glow(?) to the player to indicate they have a powerup
+                break;
+            case "Pickup_CashBonus":
+                CollideWithCashBonus();
+                break;
+            case "Pickup_Multiplier":
+                lManager.scoreMultiplier += 0.25f;
+                break;
+            default:
+                break;
         }
     }
 
