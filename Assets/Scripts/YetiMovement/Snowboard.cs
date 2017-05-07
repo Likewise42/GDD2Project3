@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class Snowboard : MonoBehaviour {
 
-    public float sideSpeed;
-    public float jumpSpeed;
+    public bool sideSpeedBoard;
+    public bool magnetSeekBoard;
+    public bool accelerationBoard;
+    public bool coinValueBoard;
+
     public float acceleration;
     public float maxSpeed;
-    public float pickupRange;
+    public float sideSpeed;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
