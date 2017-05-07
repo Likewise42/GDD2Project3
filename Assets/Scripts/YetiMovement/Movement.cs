@@ -18,11 +18,15 @@ public class Movement : MonoBehaviour {
     public float boundaryLength;
     public GameObject world;
 
+    private float rotation;
+
+    public LevelManager lManager;
+
     private float lastJumpForce;
 
     private float sideSpeed;
-    private int jumps;
     private float jumpSpeed;
+
 
     private Snowboard sb;
     private bool collidingWithRamp;
@@ -42,62 +46,42 @@ public class Movement : MonoBehaviour {
         collidingWithRamp = false;
         justLeftRamp = false;
         jump = false;
+        finishedSpinningOut = true;
 
         sb = gameObject.GetComponentInChildren<Snowboard>();
 
         sideSpeed = sb.sideSpeed;
         jumpSpeed = sb.jumpSpeed;
-        jumps = sb.jumps;
+
+        rotation = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-
         acceleration = Vector3.zero;
-
-        // w key
-        if (Input.GetKeyDown("w"))
-        {
-            if(jumps > 0)
-            {
-                acceleration += new Vector3(0, jumpSpeed, 0);
-                wDown = true;
-                jump = true;
-                jumps--;
-            }
-        }
-        if (Input.GetKeyUp("w"))
-        {
-            if (wDown)
-            {
-                acceleration -= new Vector3(0, jumpSpeed, 0);
-                wDown = false;
-                jump = false;
-            }
-        }
 
         // d key
         if (Input.GetKeyDown("d"))
         {
-            acceleration += new Vector3(0, 0, sideSpeed);
+            acceleration += new Vector3(sideSpeed, 0, 0);
             dDown = true;
         }
         if (Input.GetKeyUp("d"))
         {
-            acceleration -= new Vector3(0, 0, sideSpeed);
+            acceleration -= new Vector3(sideSpeed, 0, 0);
             dDown = false;
         }
 
         // a key
         if (Input.GetKeyDown("a"))
         {
-            acceleration += new Vector3(0, 0, -sideSpeed);
+            acceleration += new Vector3(-sideSpeed, 0, 0);
             aDown = true;
         }
         if (Input.GetKeyUp("a"))
         {
-            acceleration -= new Vector3(0, 0, -sideSpeed);
+            acceleration -= new Vector3(-sideSpeed, 0, 0);
             aDown = false;
         }
 
@@ -128,12 +112,14 @@ public class Movement : MonoBehaviour {
         {
             Debug.Log("Colliding with ramp");
             transform.Translate(new Vector3(0, 0.5f, 0));
+            jump = true;
         }
         else if(!collidingWithRamp && justLeftRamp)
         {
             print("just left ramp");
             acceleration.y += world.GetComponent<WorldSpin>().speed / 9f + (transform.position.y - yStart) / 9f;
             justLeftRamp = false;
+            jump = false;
         }
 
         // obstacle slowing
@@ -143,14 +129,18 @@ public class Movement : MonoBehaviour {
         }*/
         if (!finishedSpinningOut)
         {
-            if (world.GetComponent<WorldSpin>().speed > 3f /* The speed you slow to upon hitting a rock */)
+            world.GetComponent<WorldSpin>().Slow();
+            rotation += 10f;
+            if (rotation >= 720)
             {
-                world.GetComponent<WorldSpin>().Slow();
-            }
-            else
-            {
+                rotation = 0;
                 finishedSpinningOut = true;
             }
+            gameObject.transform.Rotate(new Vector3(0, rotation * Time.deltaTime, 0), Space.Self);
+        }
+        else
+        {
+            gameObject.transform.eulerAngles = new Vector3(0, 90, 0);
         }
         
 
@@ -158,18 +148,18 @@ public class Movement : MonoBehaviour {
         velocity += acceleration;
 
         // update position every frame
-        transform.Translate((velocity * Time.deltaTime) * 15);
+        transform.Translate((velocity * Time.deltaTime) * 15, Space.World);
 
         // left and right boundaries
         if (transform.position.x > xStart + boundaryLength)
         {
-            Vector3 overflowVec = new Vector3(0, 0, -1 * (transform.position.x - (xStart + boundaryLength)));
-            transform.Translate(overflowVec);
+            Vector3 overflowVec = new Vector3(-1 * (transform.position.x - (xStart + boundaryLength)), 0, 0);
+            transform.Translate(overflowVec, Space.World);
         }
         else if (transform.position.x < xStart - boundaryLength)
         {
-            Vector3 overflowVec = new Vector3(0, 0, -1 * (transform.position.x + (xStart + boundaryLength)));
-            transform.Translate(overflowVec);
+            Vector3 overflowVec = new Vector3(-1 * (transform.position.x + (xStart + boundaryLength)), 0, 0);
+            transform.Translate(overflowVec, Space.World);
         }
 
 
@@ -180,7 +170,6 @@ public class Movement : MonoBehaviour {
 
     void CollideWithObstacle()
     {
-        Debug.Log("Hit an obstacle");
         finishedSpinningOut = false;
     }
     void ExitCollideWithObstacle()
@@ -204,12 +193,22 @@ public class Movement : MonoBehaviour {
 
     void CollideWithColdCash()
     {
-        Debug.Log("Hit ColdCash");
+        lManager.addColdCash(1);
+        if(!this.GetComponent<AudioSource>().isPlaying)
+        {
+            this.GetComponent<AudioSource>().Play();
+        }
+        else
+        {
+            this.GetComponent<AudioSource>().Stop();
+            this.GetComponent<AudioSource>().Play();
+        }
     }
-
+    
     void CollideWithLevelEnd()
     {
-        Debug.Log("Hit end of level");
+        lManager.EndLevel();
+        world.GetComponent<AudioSource>().Stop();
     }
 
     void OnTriggerEnter(Collider other)
@@ -230,6 +229,14 @@ public class Movement : MonoBehaviour {
         else if (otherObj.CompareTag("ColdCash"))
         {
             CollideWithColdCash();
+        }
+        else if (otherObj.CompareTag("SlalomFlags"))
+        {
+            lManager.hitSlalom = true;
+        }
+        else if (otherObj.CompareTag("SlalomCheckpoint"))
+        {
+            lManager.procSlalom();
         }
     }
 

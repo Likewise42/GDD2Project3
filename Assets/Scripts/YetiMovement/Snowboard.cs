@@ -6,7 +6,9 @@ public class Snowboard : MonoBehaviour {
 
     public float sideSpeed;
     public float jumpSpeed;
-    public int jumps;
+    public float acceleration;
+    public float maxSpeed;
+    public float pickupRange;
 
 	// Use this for initialization
 	void Start () {
