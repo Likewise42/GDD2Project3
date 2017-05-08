@@ -6,6 +6,10 @@ public class YetiGameData {
 
     private static uint coldCash = 0;
 
+    private static uint highScore = 0;
+
+    public static int coldCashMultiplier = 1;
+
     public static uint ColdCash
     {
         get{
@@ -13,10 +17,20 @@ public class YetiGameData {
         }
         set
         {
-            if(value < 0)
-                coldCash = 0;
-            else
                 coldCash = value;
+        }
+    }
+
+
+    public static uint HighScore
+    {
+        get
+        {
+            return highScore;
+        }
+        set
+        {
+            highScore = value;
         }
     }
 }

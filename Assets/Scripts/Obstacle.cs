@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour {
 
-    private bool reachedEnd;
+    public bool reachedEnd;
 
     public bool ReachedEnd
     {
@@ -12,12 +12,14 @@ public class Obstacle : MonoBehaviour {
     }
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         reachedEnd = false;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		
 	}
 

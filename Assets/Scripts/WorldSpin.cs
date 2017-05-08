@@ -6,39 +6,36 @@ public class WorldSpin : MonoBehaviour {
 
     public GameObject player;
     public Camera cam;
-    private float speed;
-    public float maxSpeed;
-    public float acceleration;
+    public float speed;
+    private float maxSpeed;
+    private float acceleration;
     private Vector3 camOriginal;
+    private Snowboard sb;
 
 	// Use this for initialization
 	void Start () {
         speed = 0.0f;
         //maxSpeed = 4.0f;
         camOriginal = cam.transform.position;
+        sb = GameObject.FindGameObjectWithTag("snowboard").GetComponent<Snowboard>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
         this.transform.Rotate(new Vector3(0f, speed * Time.deltaTime, 0f));
-        speed += acceleration;
+        speed += sb.acceleration;
 
         //maximum speed
-        if (speed >= maxSpeed)
+        if (speed >= sb.maxSpeed)
         {
-            speed = maxSpeed;
+            speed = sb.maxSpeed;
         }
 
-        cam.transform.position = new Vector3(cam.transform.position.x, camOriginal.y + (speed / 2), camOriginal.z - (speed * 2));
-
-        if (Input.GetKey("e"))
-        {
-            Slow();
-        }
+        cam.transform.position = new Vector3(cam.transform.position.x, camOriginal.y + 7 /*(speed / 2)*/, camOriginal.z - 20 /*(speed * 2) */);
 	}
 
     public void Slow()
     {
-        speed = speed * .7f;
+        speed = speed * .95f;
     }
 }

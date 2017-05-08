@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ramp : MonoBehaviour {
 
-    private bool reachedEnd;
+    public bool reachedEnd;
 
     public bool ReachedEnd
     {
