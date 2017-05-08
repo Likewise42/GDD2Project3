@@ -25,8 +25,35 @@ public class GameScreenScript : MonoBehaviour {
     private bool end = false;
     private bool endedWithNewHighScore = false;
     private float endTimer = 0.0f;
+
+    public Color flashColor = new Color(0.0f, 0.0f, 1.0f);
+
+    private Color ogColor;
+    private float colorFlashCounter;
+
+    private Vector3 lColorS;
+    private Vector3 lColorE;
+
+    private uint prevColdCash;
     
-    
+
+    public int colorChangeFrames = 100;
+
+    public void Start()
+    {
+        prevColdCash = YetiGameData.ColdCash;
+        colorFlashCounter = colorChangeFrames;
+
+        ogColor = Coldcash.color;
+
+        lColorS.x = flashColor.r;
+        lColorS.y = flashColor.g;
+        lColorS.z = flashColor.b;
+
+        lColorE.x = ogColor.r;
+        lColorE.y = ogColor.g;
+        lColorE.z = ogColor.b;
+    }
 
     public void Update()
     {
@@ -50,6 +77,19 @@ public class GameScreenScript : MonoBehaviour {
             }
 
             SetColdCash(YetiGameData.ColdCash);
+
+            if(prevColdCash < YetiGameData.ColdCash)
+            {
+                colorFlashCounter = 0;
+                Coldcash.color = flashColor;
+                prevColdCash = YetiGameData.ColdCash;
+            }
+
+            if(colorFlashCounter < colorChangeFrames)
+            {
+                Coldcash.color = Color.Lerp(flashColor, ogColor,colorFlashCounter/colorChangeFrames);
+                colorFlashCounter++;
+            }
         }
         else
         {
@@ -111,9 +151,15 @@ public class GameScreenScript : MonoBehaviour {
     }
 
 
-    public void SetScore(uint score)
+    public void SetScore(uint score, float multiplier = 1.0f)
     {
         Score.text = "Score: " + score;
+
+        if(multiplier > 1.0f)
+        {
+            float size = Score.fontSize + 2 * multiplier;
+            Score.text += "\n<size=" + size + ">X" + multiplier + "</size>";
+        }
     }
 
     public void SetColdCash(uint coldCash)

@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour {
     private const int SLALOM_CHECKPOINT_TIMER = 10;
     public const int TIME_BETWEEN_SLALOMS = 120;
 
-    public const float SLALOM_MULT_DELTA = .05f;
+    public float SLALOM_MULT_DELTA = .05f;
 
     public uint slalomBasePoints = 100;
     private uint gameEndTimer;
@@ -222,7 +222,7 @@ public class LevelManager : MonoBehaviour {
     public void addScore(uint score)
     {
         this.score += (uint)(scoreMultiplier * score);
-        gameScreen.SetScore(this.score);
+        gameScreen.SetScore(this.score,scoreMultiplier);
     }
 
     public void addColdCash(uint coldCashAmount)
@@ -243,8 +243,13 @@ public class LevelManager : MonoBehaviour {
         }
         else
         {
-            scoreMultiplier -= slalomMultiplier;
-            slalomMultiplier = 0;
+            resetSlalomMult();
         }
+    }
+
+    public void resetSlalomMult()
+    {
+        scoreMultiplier -= slalomMultiplier;
+        slalomMultiplier = 0;
     }
 }
