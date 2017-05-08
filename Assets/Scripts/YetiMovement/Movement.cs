@@ -146,12 +146,15 @@ public class Movement : MonoBehaviour {
         {
             lockMovement = true;
             world.GetComponent<WorldSpin>().Slow();
-            rotation += 10f;
-            if (rotation >= 720)
+            if (rotation >= 680)//680
             {
                 rotation = 0;
                 finishedSpinningOut = true;
                 lockMovement = false;
+            }
+            else
+            {
+                rotation += 11f;//11
             }
             gameObject.transform.Rotate(new Vector3(0, rotation * Time.deltaTime, 0), Space.Self);
         }
