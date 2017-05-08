@@ -16,6 +16,7 @@ public class Movement : MonoBehaviour {
     private float xStart;
     private float zStart;
     public float boundaryLength;
+    public float sideSpeed;
     public GameObject world;
 
     private float rotation;
@@ -24,15 +25,19 @@ public class Movement : MonoBehaviour {
 
     private float lastJumpForce;
 
-    private float sideSpeed;
-    private float jumpSpeed;
+    private bool sideSpeedBoard;
+    private bool magnetSeekBoard;
+    private bool accelerationBoard;
+    private bool coinValueBoard;
 
 
     private Snowboard sb;
     private bool collidingWithRamp;
     private bool collidingWithObstacle;
     private bool justLeftRamp;
+    private bool resetRampJumping;
     private bool finishedSpinningOut;
+    private bool lockMovement;
 
 
     // Use this for initialization
@@ -41,19 +46,24 @@ public class Movement : MonoBehaviour {
         yStart = transform.position.y;
         xStart = transform.position.x;
         zStart = transform.position.z;
-        //boundaryLength = 8f;
 
         collidingWithRamp = false;
         justLeftRamp = false;
         jump = false;
         finishedSpinningOut = true;
+        lockMovement = false;
 
+        // Which board do I have?
         sb = gameObject.GetComponentInChildren<Snowboard>();
-
         sideSpeed = sb.sideSpeed;
-        jumpSpeed = sb.jumpSpeed;
+
+        sideSpeedBoard = sb.sideSpeedBoard; // not implemented
+        magnetSeekBoard = sb.magnetSeekBoard; // not implemented
+        accelerationBoard = sb.accelerationBoard; // not implemented
+        coinValueBoard = sb.coinValueBoard; // implemented
 
         rotation = 0;
+
     }
 
     // Update is called once per frame
@@ -64,6 +74,8 @@ public class Movement : MonoBehaviour {
         // d key
         if (Input.GetKeyDown("d"))
         {
+            Debug.Log("dDown");
+            Debug.Log("sideSpeed: " + sideSpeed);
             acceleration += new Vector3(sideSpeed, 0, 0);
             dDown = true;
         }
@@ -76,6 +88,7 @@ public class Movement : MonoBehaviour {
         // a key
         if (Input.GetKeyDown("a"))
         {
+            Debug.Log("aDown");
             acceleration += new Vector3(-sideSpeed, 0, 0);
             aDown = true;
         }
@@ -93,6 +106,7 @@ public class Movement : MonoBehaviour {
         }
         else // return the y velocity to 0
         {
+            resetRampJumping = true;
             applyGrav = false;
             transform.position = new Vector3(transform.position.x, yStart, transform.position.z);
             velocity.y = 0f;
@@ -114,12 +128,13 @@ public class Movement : MonoBehaviour {
             transform.Translate(new Vector3(0, 0.5f, 0));
             jump = true;
         }
-        else if(!collidingWithRamp && justLeftRamp)
+        else if(!collidingWithRamp && justLeftRamp && resetRampJumping)
         {
             print("just left ramp");
             acceleration.y += world.GetComponent<WorldSpin>().speed / 9f + (transform.position.y - yStart) / 9f;
             justLeftRamp = false;
             jump = false;
+            resetRampJumping = false;
         }
 
         // obstacle slowing
@@ -129,12 +144,17 @@ public class Movement : MonoBehaviour {
         }*/
         if (!finishedSpinningOut)
         {
+            lockMovement = true;
             world.GetComponent<WorldSpin>().Slow();
-            rotation += 10f;
-            if (rotation >= 720)
+            if (rotation >= 680)//680
             {
                 rotation = 0;
                 finishedSpinningOut = true;
+                lockMovement = false;
+            }
+            else
+            {
+                rotation += 11f;//11
             }
             gameObject.transform.Rotate(new Vector3(0, rotation * Time.deltaTime, 0), Space.Self);
         }
@@ -142,13 +162,24 @@ public class Movement : MonoBehaviour {
         {
             gameObject.transform.eulerAngles = new Vector3(0, 90, 0);
         }
-        
+
 
         // changes velocity
         velocity += acceleration;
 
-        // update position every frame
-        transform.Translate((velocity * Time.deltaTime) * 15, Space.World);
+        // to lock horizontal movement when you hit a rock (Do you guys have suggestions? It looks iffy to me.)
+        if (!lockMovement)
+        {
+            // update position every frame
+            transform.Translate((velocity * Time.deltaTime) * 15, Space.World);
+        }
+        else
+        {
+            Vector3 tempVerticleMovementVec = new Vector3(0, velocity.y, 0); // to keep the player moving vertically while locked horizontally
+            transform.Translate((tempVerticleMovementVec * Time.deltaTime) * 15, Space.World);
+        }
+
+
 
         // left and right boundaries
         if (transform.position.x > xStart + boundaryLength)
@@ -193,6 +224,10 @@ public class Movement : MonoBehaviour {
 
     void CollideWithColdCash()
     {
+        if(coinValueBoard)
+        {
+            lManager.addColdCash(2);
+        }
         lManager.addColdCash(1);
         if(!this.GetComponent<AudioSource>().isPlaying)
         {
