@@ -35,6 +35,7 @@ public class Movement : MonoBehaviour {
     private bool accelerationBoard;
     private bool coinValueBoard;
 
+    private bool airborne = false;
 
     private Snowboard sb;
     private bool collidingWithRamp;
@@ -43,7 +44,6 @@ public class Movement : MonoBehaviour {
     private bool resetRampJumping;
     private bool finishedSpinningOut;
     private bool lockMovement;
-
 
     // Use this for initialization
     void Start()
@@ -111,6 +111,11 @@ public class Movement : MonoBehaviour {
         }
         else // return the y velocity to 0
         {
+            if (airborne)
+            {
+                lManager.endAirScore();
+                airborne = false;
+            }
             resetRampJumping = true;
             applyGrav = false;
             transform.position = new Vector3(transform.position.x, yStart, transform.position.z);
@@ -134,6 +139,8 @@ public class Movement : MonoBehaviour {
         }
         else if(!collidingWithRamp && justLeftRamp && resetRampJumping)
         {
+            lManager.startAirScore();
+            airborne = true;
             print("just left ramp");
             acceleration.y += world.GetComponent<WorldSpin>().speed / 9f + (transform.position.y - yStart) / 9f;
             justLeftRamp = false;
