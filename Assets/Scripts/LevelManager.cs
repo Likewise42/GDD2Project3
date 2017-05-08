@@ -38,6 +38,10 @@ public class LevelManager : MonoBehaviour {
 
     public uint coldCashScore = 100;
 
+    private uint airborneScore = 0;
+
+    public uint airSizeMaxScore;
+
     private uint currentColdCash;
     private uint score;
     private float slalomMultiplier = 0;
@@ -45,6 +49,8 @@ public class LevelManager : MonoBehaviour {
     private bool stopSpawning;
     private bool slalomEvent;
     private int currentSlalomCheckpointCount;
+
+    private bool airborne = false;
 
     public GameScreenScript gameScreen;
     public GameObject SpawnerObj;
@@ -247,6 +253,30 @@ public class LevelManager : MonoBehaviour {
         {
             YetiGameData.HighScore = score;
         }
+
+    }
+
+    public void startAirScore()
+    {
+
+    }
+
+    public void endAirScore()
+    {
+
+    }
+
+    private void addAirborneScore(uint score)
+    {
+        airborneScore += score;
+        
+        gameScreen.setAirScore(airborneScore, (float)airborneScore/airSizeMaxScore);
+    }
+
+    private void flushAirborneScore()
+    {
+        score += airborneScore;
+        airborneScore = 0;
 
     }
 

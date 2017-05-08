@@ -19,6 +19,7 @@ public class GameScreenScript : MonoBehaviour {
     public Text ScoreText;
     public Text ColdCashCollectedText;
     public Text HighScore;
+    public Text AirScore;
 
     public float highScoreFlash;
 
@@ -27,6 +28,15 @@ public class GameScreenScript : MonoBehaviour {
     private float endTimer = 0.0f;
 
     public Color flashColor = new Color(0.0f, 0.0f, 1.0f);
+
+
+    public Color airStartColor;
+    public Color airEndColor;
+
+    public float airScoreMinSize;
+    public float airScoreMaxSize;
+
+    
 
     private Color ogColor;
     private float colorFlashCounter;
@@ -53,6 +63,22 @@ public class GameScreenScript : MonoBehaviour {
         lColorE.x = ogColor.r;
         lColorE.y = ogColor.g;
         lColorE.z = ogColor.b;
+    }
+
+    public void setAirScore(uint airScore, float percentToMax)
+    {
+
+
+        float size = Mathf.Lerp(airScoreMinSize, airScoreMaxSize, percentToMax);
+        Color color = Color.Lerp(airStartColor, airEndColor, percentToMax);
+
+        AirScore.text = "<size=" + size + ">" + airScore + "<size>";
+        AirScore.color = color;
+    }
+
+    public void hideAirScore()
+    {
+        AirScore.text = "";
     }
 
     public void Update()
