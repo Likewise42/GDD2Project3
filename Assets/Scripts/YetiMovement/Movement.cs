@@ -194,12 +194,21 @@ public class Movement : MonoBehaviour {
     void CollideWithColdCash()
     {
         lManager.addColdCash(1);
+        if(!this.GetComponent<AudioSource>().isPlaying)
+        {
+            this.GetComponent<AudioSource>().Play();
+        }
+        else
+        {
+            this.GetComponent<AudioSource>().Stop();
+            this.GetComponent<AudioSource>().Play();
+        }
     }
     
     void CollideWithLevelEnd()
     {
         lManager.EndLevel();
-
+        world.GetComponent<AudioSource>().Stop();
     }
 
     void OnTriggerEnter(Collider other)
