@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour {
+public class SlalomObstacle : MonoBehaviour {
 
     public bool reachedEnd;
-    public bool pickedUp;
+
+    public GameObject pole1;
+    public GameObject pole2;
+
+    public Material successMaterial;
 
     public bool ReachedEnd
     {
         get { return reachedEnd; }
-    }
-
-    public bool PickedUp
-    {
-        get { return pickedUp; }
     }
 
     // Use this for initialization
@@ -29,16 +28,19 @@ public class Pickup : MonoBehaviour {
 
     }
 
+    public void Success()
+    {
+        pole1.GetComponent<MeshRenderer>().material = successMaterial;
+        pole2.GetComponent<MeshRenderer>().material = successMaterial;
+    }
+    
+
     void OnTriggerEnter(Collider other)
     {
         GameObject otherObj = other.gameObject;
         if (otherObj.CompareTag("Despawner"))
         {
             reachedEnd = true;
-        }
-        else if (otherObj.CompareTag("Player"))
-        {
-            pickedUp = true;
         }
     }
 }

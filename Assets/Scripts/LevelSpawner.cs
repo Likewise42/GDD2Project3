@@ -22,6 +22,7 @@ public class LevelSpawner : MonoBehaviour {
     private List<GameObject> ramps;
     private List<GameObject> coldcash;
     private List<GameObject> slalomObjs;
+    private List<GameObject> slalomCheckpointObjs;
     private List<GameObject> pickups;
     private GameObject levelObj;
     private Vector3 startPos;
@@ -34,6 +35,7 @@ public class LevelSpawner : MonoBehaviour {
         ramps = new List<GameObject>();
         coldcash = new List<GameObject>();
         slalomObjs = new List<GameObject>();
+        slalomCheckpointObjs = new List<GameObject>();
         pickups = new List<GameObject>();
         startPos = gameObject.transform.position;
         startRot = gameObject.transform.rotation;
@@ -106,11 +108,32 @@ public class LevelSpawner : MonoBehaviour {
         for (int i = slalomObjs.Count - 1; i >= 0; i--)
         {
             GameObject slalomObj = slalomObjs[i];
-            Obstacle slalomScript = slalomObj.GetComponent<Obstacle>();
+            
+            SlalomObstacle slalomScript = slalomObj.GetComponent<SlalomObstacle>();
+            Debug.Log(slalomScript.ReachedEnd);
             if (slalomScript.ReachedEnd)
             {
                 slalomObjs.RemoveAt(i);
                 Destroy(slalomObj);
+            }
+        }
+    }
+
+    /// <summary>
+    /// CullCash iterates over the slalomObjs list and removes any member for whom reachedEnd == true
+    /// </summary>
+    void CullSlalomCheckpointObjs()
+    {
+        for (int i = slalomCheckpointObjs.Count - 1; i >= 0; i--)
+        {
+            GameObject slalomCheckpointObj = slalomCheckpointObjs[i];
+
+            Obstacle slalomScript = slalomCheckpointObj.GetComponent<Obstacle>();
+            Debug.Log(slalomScript.ReachedEnd);
+            if (slalomScript.ReachedEnd)
+            {
+                slalomCheckpointObjs.RemoveAt(i);
+                Destroy(slalomCheckpointObj);
             }
         }
     }
@@ -138,6 +161,7 @@ public class LevelSpawner : MonoBehaviour {
         CullRamps();
         CullCash();
         CullSlalomObjs();
+        CullSlalomCheckpointObjs();
         CullPickups();
     }
     
@@ -180,7 +204,7 @@ public class LevelSpawner : MonoBehaviour {
     {
         return CreateObject(slalomCheckpointPrefab,
                             new Vector3(0, 0, 0),
-                            slalomObjs);
+                            slalomCheckpointObjs);
     }
 
     public GameObject CreateBoostPickup()

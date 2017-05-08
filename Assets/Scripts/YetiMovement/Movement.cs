@@ -259,6 +259,7 @@ public class Movement : MonoBehaviour {
                 break;
             case "SlalomFlags":
                 lManager.hitSlalom = true;
+                otherObj.GetComponentInParent<SlalomObstacle>().Success();
                 break;
             case "SlalomCheckpoint":
                 lManager.procSlalom();
