@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour {
     public const int OBSTACLE_SPAWN_INTERVAL = 120;
     public const int RAMP_SPAWN_INTERVAL = 120;
     public const int CASH_SPAWN_INTERVAL = 80;
+    public const int PICKUP_SPAWN_INTERVAL = 140;
     public const int TIME_TO_SLALOM = 600;
     public const int LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
 
@@ -18,13 +19,14 @@ public class LevelManager : MonoBehaviour {
     private const int SLALOM_CHECKPOINT_TIMER = 10;
     public const int TIME_BETWEEN_SLALOMS = 120;
 
-    public float SLALOM_MULT_DELTA = .05f;
+    public const float SLALOM_MULT_DELTA = .05f;
 
     public uint slalomBasePoints = 100;
     private uint gameEndTimer;
     private int obstacleSpawnTimer;
     private int rampSpawnTimer;
     private int cashSpawnTimer;
+    private int pickupSpawnTimer;
     private int levelEndSpawnTimer;
     private int slalomTimer;
 
@@ -39,7 +41,7 @@ public class LevelManager : MonoBehaviour {
     private uint currentColdCash;
     private uint score;
     private float slalomMultiplier = 0;
-    private float scoreMultiplier = 1;
+    public float scoreMultiplier = 1;
     private bool stopSpawning;
     private bool slalomEvent;
     private int currentSlalomCheckpointCount;
@@ -136,9 +138,28 @@ public class LevelManager : MonoBehaviour {
                 spawner.CreateColdCash();
             }
 
+            if (ShouldSpawnPickup())
+            {
+                // Randomly choose a pickup to spawn		
+                float decision = Random.Range(0, 1.0f);
+                if (decision < 0.33f)
+                {
+                    spawner.CreateBoostPickup();
+                }
+                else if (decision < 0.66f)
+                {
+                    spawner.CreateCashBonusPickup();
+                }
+                else
+                {
+                    spawner.CreateMultiplierPickup();
+                }
+            }
+
             obstacleSpawnTimer++;
             rampSpawnTimer++;
             cashSpawnTimer++;
+            pickupSpawnTimer++;
             levelEndSpawnTimer++;
             slalomTimer++;
 
@@ -203,6 +224,16 @@ public class LevelManager : MonoBehaviour {
         return false;
     }
 
+    bool ShouldSpawnPickup()
+    {
+        if (pickupSpawnTimer >= PICKUP_SPAWN_INTERVAL)
+        {
+            pickupSpawnTimer = 0;
+            return true;
+        }
+        return false;
+    }
+
     public void EndLevel()
     {
         if (!levelRunning)
@@ -222,7 +253,7 @@ public class LevelManager : MonoBehaviour {
     public void addScore(uint score)
     {
         this.score += (uint)(scoreMultiplier * score);
-        gameScreen.SetScore(this.score,scoreMultiplier);
+        gameScreen.SetScore(this.score, scoreMultiplier);
     }
 
     public void addColdCash(uint coldCashAmount)
