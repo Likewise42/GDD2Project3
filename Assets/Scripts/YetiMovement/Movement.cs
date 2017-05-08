@@ -23,6 +23,11 @@ public class Movement : MonoBehaviour {
 
     public LevelManager lManager;
 
+    // A little janky to have this in player, but. . .
+    public int coldCashMultiplier = 1;
+    public float coldCashBonusTimer = 0;
+    public const int COLD_CASH_BONUS_DURATION = 900; // 15 seconds
+
     private float lastJumpForce;
 
     private bool sideSpeedBoard;
@@ -30,6 +35,7 @@ public class Movement : MonoBehaviour {
     private bool accelerationBoard;
     private bool coinValueBoard;
 
+    private bool airborne = false;
 
     private Snowboard sb;
     private bool collidingWithRamp;
@@ -38,7 +44,6 @@ public class Movement : MonoBehaviour {
     private bool resetRampJumping;
     private bool finishedSpinningOut;
     private bool lockMovement;
-
 
     // Use this for initialization
     void Start()
@@ -106,6 +111,11 @@ public class Movement : MonoBehaviour {
         }
         else // return the y velocity to 0
         {
+            if (airborne)
+            {
+                lManager.endAirScore();
+                airborne = false;
+            }
             resetRampJumping = true;
             applyGrav = false;
             transform.position = new Vector3(transform.position.x, yStart, transform.position.z);
@@ -117,7 +127,6 @@ public class Movement : MonoBehaviour {
         if (applyGrav)
         {
             acceleration.y -= 0.05f;
-            //lastJumpForce += 0.05f;
         }
         
 
@@ -130,6 +139,8 @@ public class Movement : MonoBehaviour {
         }
         else if(!collidingWithRamp && justLeftRamp && resetRampJumping)
         {
+            lManager.startAirScore();
+            airborne = true;
             print("just left ramp");
             acceleration.y += world.GetComponent<WorldSpin>().speed / 9f + (transform.position.y - yStart) / 9f;
             justLeftRamp = false;
@@ -138,15 +149,11 @@ public class Movement : MonoBehaviour {
         }
 
         // obstacle slowing
-        /*if(collidingWithObstacle)
-        {
-            world.GetComponent<WorldSpin>().Slow();
-        }*/
         if (!finishedSpinningOut)
         {
             lockMovement = true;
             world.GetComponent<WorldSpin>().Slow();
-            if (rotation >= 680)//680
+            if (rotation >= 680)
             {
                 rotation = 0;
                 finishedSpinningOut = true;
@@ -154,7 +161,7 @@ public class Movement : MonoBehaviour {
             }
             else
             {
-                rotation += 11f;//11
+                rotation += 11f;
             }
             gameObject.transform.Rotate(new Vector3(0, rotation * Time.deltaTime, 0), Space.Self);
         }
@@ -193,28 +200,16 @@ public class Movement : MonoBehaviour {
             transform.Translate(overflowVec, Space.World);
         }
 
-
-        //collisionDetection();
         
         gameObject.GetComponent<Animator>().SetBool("Jumping", jump);
     }
-
-    void CollideWithObstacle()
-    {
-        finishedSpinningOut = false;
-    }
+    
     void ExitCollideWithObstacle()
     {
         Debug.Log("Exiting ramp");
         collidingWithObstacle = false;
     }
-
-    void CollideWithRamp()
-    {
-        Debug.Log("Hit a ramp");
-        collidingWithRamp = true;
-    }
-
+    
     void ExitCollideWithRamp()
     {
         Debug.Log("Exiting ramp");
@@ -239,7 +234,13 @@ public class Movement : MonoBehaviour {
             this.GetComponent<AudioSource>().Play();
         }
     }
-    
+
+    void CollideWithCashBonus()
+    {
+        coldCashMultiplier = 2;
+        coldCashBonusTimer = COLD_CASH_BONUS_DURATION;
+    }
+
     void CollideWithLevelEnd()
     {
         lManager.EndLevel();
@@ -249,29 +250,38 @@ public class Movement : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         GameObject otherObj = other.gameObject;
-        if (otherObj.CompareTag("Obstacle"))
+        switch (otherObj.tag)
         {
-            CollideWithObstacle();
-        }
-        else if (otherObj.CompareTag("Ramp"))
-        {
-            CollideWithRamp();
-        }
-        else if (otherObj.CompareTag("LevelEnd"))
-        {
-            CollideWithLevelEnd();
-        }
-        else if (otherObj.CompareTag("ColdCash"))
-        {
-            CollideWithColdCash();
-        }
-        else if (otherObj.CompareTag("SlalomFlags"))
-        {
-            lManager.hitSlalom = true;
-        }
-        else if (otherObj.CompareTag("SlalomCheckpoint"))
-        {
-            lManager.procSlalom();
+            case "Obstacle":
+                finishedSpinningOut = false;
+                break;
+            case "Ramp":
+                collidingWithRamp = true;
+                break;
+            case "LevelEnd":
+                lManager.EndLevel();
+                break;
+            case "ColdCash":
+                CollideWithColdCash();
+                break;
+            case "SlalomFlags":
+                lManager.hitSlalom = true;
+                otherObj.GetComponentInParent<SlalomObstacle>().Success();
+                break;
+            case "SlalomCheckpoint":
+                lManager.procSlalom();
+                break;
+            case "Pickup_Boost":
+                // Boost logic goes here - remember to add some sort of glow(?) to the player to indicate they have a powerup
+                break;
+            case "Pickup_CashBonus":
+                CollideWithCashBonus();
+                break;
+            case "Pickup_Multiplier":
+                lManager.scoreMultiplier += 0.25f;
+                break;
+            default:
+                break;
         }
     }
 
