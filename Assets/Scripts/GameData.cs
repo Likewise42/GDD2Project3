@@ -10,6 +10,8 @@ public class YetiGameData {
 
     public static int coldCashMultiplier = 1;
 
+    public static uint currentBoard = 0;
+
     public static uint ColdCash
     {
         get{
@@ -31,6 +33,18 @@ public class YetiGameData {
         set
         {
             highScore = value;
+        }
+    }
+
+    public static uint CurrentBoard
+    {
+        get
+        {
+            return currentBoard;
+        }
+        set
+        {
+            currentBoard = value;
         }
     }
 }

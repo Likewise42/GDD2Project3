@@ -62,12 +62,17 @@ public class Movement : MonoBehaviour {
         sb = gameObject.GetComponentInChildren<Snowboard>();
         sideSpeed = sb.sideSpeed;
 
-        sideSpeedBoard = sb.sideSpeedBoard; // not implemented
+        sideSpeedBoard = sb.sideSpeedBoard; // implemented
         magnetSeekBoard = sb.magnetSeekBoard; // not implemented
         accelerationBoard = sb.accelerationBoard; // not implemented
         coinValueBoard = sb.coinValueBoard; // implemented
 
         rotation = 0;
+
+        if (sideSpeedBoard)
+        {
+            sideSpeed = 4;
+        }
 
     }
 
@@ -76,11 +81,10 @@ public class Movement : MonoBehaviour {
     {
         acceleration = Vector3.zero;
 
+
         // d key
         if (Input.GetKeyDown("d"))
         {
-            Debug.Log("dDown");
-            Debug.Log("sideSpeed: " + sideSpeed);
             acceleration += new Vector3(sideSpeed, 0, 0);
             dDown = true;
         }
@@ -93,7 +97,6 @@ public class Movement : MonoBehaviour {
         // a key
         if (Input.GetKeyDown("a"))
         {
-            Debug.Log("aDown");
             acceleration += new Vector3(-sideSpeed, 0, 0);
             aDown = true;
         }
@@ -133,7 +136,6 @@ public class Movement : MonoBehaviour {
         // ramp collision resolution
         if (collidingWithRamp)
         {
-            Debug.Log("Colliding with ramp");
             transform.Translate(new Vector3(0, 0.5f, 0));
             jump = true;
         }
@@ -141,7 +143,6 @@ public class Movement : MonoBehaviour {
         {
             lManager.startAirScore();
             airborne = true;
-            print("just left ramp");
             acceleration.y += world.GetComponent<WorldSpin>().speed / 9f + (transform.position.y - yStart) / 9f;
             justLeftRamp = false;
             jump = false;
@@ -174,7 +175,7 @@ public class Movement : MonoBehaviour {
         // changes velocity
         velocity += acceleration;
 
-        // to lock horizontal movement when you hit a rock (Do you guys have suggestions? It looks iffy to me.)
+        // to lock horizontal movement when you hit a rock
         if (!lockMovement)
         {
             // update position every frame
@@ -206,13 +207,11 @@ public class Movement : MonoBehaviour {
     
     void ExitCollideWithObstacle()
     {
-        Debug.Log("Exiting ramp");
         collidingWithObstacle = false;
     }
     
     void ExitCollideWithRamp()
     {
-        Debug.Log("Exiting ramp");
         collidingWithRamp = false;
         justLeftRamp = true;
     }

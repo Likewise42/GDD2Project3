@@ -8,6 +8,7 @@ public class Snowboard : MonoBehaviour {
     public bool magnetSeekBoard;
     public bool accelerationBoard;
     public bool coinValueBoard;
+    public bool defaultBoard;
 
     public float acceleration;
     public float maxSpeed;
