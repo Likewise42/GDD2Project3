@@ -9,6 +9,7 @@ public class YetiMovement : MonoBehaviour {
     private bool isRunning;
     private KeyCode run;
     private float speed;
+    public float initalY;
 
 	// Use this for initialization
 	void Start () {
@@ -61,6 +62,17 @@ public class YetiMovement : MonoBehaviour {
             rotation = new Vector3(0, -5, 0);
             gameObject.transform.Rotate(rotation, Space.Self);
         }
+
+        //reset y
+        Vector3 currentPos = gameObject.transform.position;
+        currentPos.y = initalY;
+        gameObject.transform.position = currentPos;
+
+        //reset rotation
+        Quaternion currentRot = gameObject.transform.rotation;
+        currentRot.x = 0;
+        currentRot.z = 0;
+        gameObject.transform.rotation = currentRot;
 
         gameObject.GetComponent<Animator>().SetBool("Walking", isWalking);
         gameObject.GetComponent<Animator>().SetBool("Running", isRunning);
