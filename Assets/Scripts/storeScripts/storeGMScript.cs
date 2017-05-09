@@ -40,9 +40,6 @@ public class storeGMScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
-
-
         //targetTransform = startingCameraTransform;
 
         mainCamera.enabled = true;
@@ -95,14 +92,14 @@ public class storeGMScript : MonoBehaviour
 
     public void moveRightCam(string direction)
     {
-        if (direction == "left")
+        if (direction == "left" && rightCameraTransform.position.z < -4)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
             rightCameraTransform.position += moveZ;
             
         }
-        else if(direction == "right")
+        else if(direction == "right" && rightCameraTransform.position.z > -12)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
@@ -112,14 +109,14 @@ public class storeGMScript : MonoBehaviour
 
     public void moveLeftCam(string direction)
     {
-        if (direction == "left")
+        if (direction == "left" && leftCameraTransform.position.z > -12)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
             leftCameraTransform.position -= moveZ;
 
         }
-        else if (direction == "right")
+        else if (direction == "right" && leftCameraTransform.position.z < -4)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
@@ -129,12 +126,12 @@ public class storeGMScript : MonoBehaviour
 
     void rightCameraControls()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && rightCameraTransform.position.z < -4)
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             moveRightCam("left");
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) && (rightCameraTransform.position.z > -12))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             moveRightCam("right");
         }
@@ -142,12 +139,12 @@ public class storeGMScript : MonoBehaviour
 
     void leftCameraControls()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow) && leftCameraTransform.position.z < -4)
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             moveLeftCam("right");
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && (leftCameraTransform.position.z > -12))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             moveLeftCam("left");
         }
