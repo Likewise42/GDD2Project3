@@ -2,9 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class board
+{
+    public string name;
+    public int cost;
+    public string desc;
+
+
+    public board(string Name, int Cost, string Desc)
+    {
+        name = Name;
+        cost = Cost;
+        desc = Desc;
+    }
+}
+
 public class storeGMScript : MonoBehaviour
 {
-
     public Camera mainCamera;
     public Camera startingCamera;
     public Camera leftCamera;
@@ -36,11 +50,16 @@ public class storeGMScript : MonoBehaviour
     //script for when the yeti shop script is done;
     public yetiShop shopScript;
 
+   // private ArrayList yetiArray;
+    private board[] boardArray = new board[5];
+
+    private int currentBoard;
 
     // Use this for initialization
     void Start()
     {
 
+        currentBoard = 0;
 
 
         //targetTransform = startingCameraTransform;
@@ -51,8 +70,30 @@ public class storeGMScript : MonoBehaviour
         rightCamera.enabled = false;
         clerkCamera.enabled = false;
 
+        
+
+        //default board
+        boardArray[0] = new board("Basic Board", 0, "A basic board to start you off.");
+
+        //sideSpeed board
+        boardArray[1] = new board("Agile Board", 5, "A board that handles well, allowing you to move side to side easier.");
+
+        //accel board
+        boardArray[2] = new board("Sleek Board", 10, "This board is slimmer and sleeker then the others, allowing you to reach your top speeds faster!");
+
+        //mag board
+        boardArray[3] = new board("Magnetic Board", 15, "This board has a built in Cold Cash magnet!");
+
+        //c val board
+        boardArray[4] = new board("Money Board", 20, "A board with the inate ability to make Cold Cash more valuable.");
+
 
         whichView = 1;
+    }
+
+    public void buyBoard()
+    {
+        Debug.Log("Buying " + boardArray[currentBoard].name);
     }
 
     //void disableAllCameras()
@@ -95,14 +136,14 @@ public class storeGMScript : MonoBehaviour
 
     public void moveRightCam(string direction)
     {
-        if (direction == "left")
+        if (direction == "left" && rightCameraTransform.position.z < -4)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
             rightCameraTransform.position += moveZ;
             
         }
-        else if(direction == "right")
+        else if(direction == "right" && rightCameraTransform.position.z > -12)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
@@ -112,29 +153,33 @@ public class storeGMScript : MonoBehaviour
 
     public void moveLeftCam(string direction)
     {
-        if (direction == "left")
+        if (direction == "left" && leftCameraTransform.position.z > -12)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
             leftCameraTransform.position -= moveZ;
 
+            currentBoard++;
+
         }
-        else if (direction == "right")
+        else if (direction == "right" && leftCameraTransform.position.z < -4)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
             leftCameraTransform.position += moveZ;
+
+            currentBoard--;
         }
     }
 
     void rightCameraControls()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && rightCameraTransform.position.z < -4)
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             moveRightCam("left");
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) && (rightCameraTransform.position.z > -12))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             moveRightCam("right");
         }
@@ -142,12 +187,12 @@ public class storeGMScript : MonoBehaviour
 
     void leftCameraControls()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow) && leftCameraTransform.position.z < -4)
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             moveLeftCam("right");
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && (leftCameraTransform.position.z > -12))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             moveLeftCam("left");
         }
@@ -223,7 +268,7 @@ public class storeGMScript : MonoBehaviour
         {
             leftCameraControls();
 
-            shopScript.setBoardView("Rad", 3000000, "DESC32");
+            shopScript.setBoardView(boardArray[currentBoard].name, boardArray[currentBoard].cost, boardArray[currentBoard].desc);
         }
 
 

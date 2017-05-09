@@ -21,8 +21,6 @@ public class yetiShop : MonoBehaviour {
 
     public GameObject boardViewPanel;
 
-
-
     public void Update()
     {
         coldCashText.text = "Cold Cash: " + YetiGameData.ColdCash;
