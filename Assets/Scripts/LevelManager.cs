@@ -166,23 +166,23 @@ public class LevelManager : MonoBehaviour {
                 spawner.CreateColdCash();
             }
 
-            if (ShouldSpawnPickup())
-            {
-                // Randomly choose a pickup to spawn		
-                float decision = Random.Range(0, 1.0f);
-                if (decision < 0.33f)
-                {
-                    spawner.CreateBoostPickup();
-                }
-                else if (decision < 0.66f)
-                {
-                    spawner.CreateCashBonusPickup();
-                }
-                else
-                {
-                    spawner.CreateMultiplierPickup();
-                }
-            }
+            //if (ShouldSpawnPickup())
+            //{
+            //    // Randomly choose a pickup to spawn		
+            //    float decision = Random.Range(0, 1.0f);
+            //    if (decision < 0.33f)
+            //    {
+            //        spawner.CreateBoostPickup();
+            //    }
+            //    else if (decision < 0.66f)
+            //    {
+            //        spawner.CreateCashBonusPickup();
+            //    }
+            //    else
+            //    {
+            //        spawner.CreateMultiplierPickup();
+            //    }
+            //}
 
             obstacleSpawnTimer++;
             rampSpawnTimer++;
