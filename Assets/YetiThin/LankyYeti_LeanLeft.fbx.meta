@@ -1,0 +1,225 @@
+fileFormatVersion: 2
+guid: 9aba64a3a076f8b47b3b82e6b46efa15
+timeCreated: 1494435246
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Eye_L1
+    100002: JT_Ankle_L
+    100004: JT_Ankle_R
+    100006: JT_Base
+    100008: JT_Clavicle_L
+    100010: JT_Clavicle_R
+    100012: JT_Elbow_L
+    100014: JT_Elbow_R
+    100016: JT_Eye_L
+    100018: JT_Eye_R
+    100020: JT_Eyelid_L
+    100022: JT_Eyelid_R
+    100024: JT_EyelidBottom_L
+    100026: JT_EyelidBottom_R
+    100028: JT_Finger1Base_L
+    100030: JT_Finger1Base_R
+    100032: JT_Finger1End_L
+    100034: JT_Finger1End_R
+    100036: JT_Finger1Mid_L
+    100038: JT_Finger1Mid_R
+    100040: JT_Finger1Tip_L
+    100042: JT_Finger1Tip_R
+    100044: JT_Finger2Base_L
+    100046: JT_Finger2Base_R
+    100048: JT_Finger2End_L
+    100050: JT_Finger2End_R
+    100052: JT_Finger2Mid_L
+    100054: JT_Finger2Mid_R
+    100056: JT_Finger2Tip_L
+    100058: JT_Finger2Tip_R
+    100060: JT_Finger3Base_L
+    100062: JT_Finger3Base_R
+    100064: JT_Finger3End_L
+    100066: JT_Finger3End_R
+    100068: JT_Finger3Mid_L
+    100070: JT_Finger3Mid_R
+    100072: JT_Finger3Tip_L
+    100074: JT_Finger3Tip_R
+    100076: JT_Finger4Base_L
+    100078: JT_Finger4Base_R
+    100080: JT_Finger4End_L
+    100082: JT_Finger4End_R
+    100084: JT_Finger4Mid_L
+    100086: JT_Finger4Mid_R
+    100088: JT_Finger4Tip_L
+    100090: JT_Finger4Tip_R
+    100092: JT_Head
+    100094: JT_HeadTop
+    100096: JT_Hip_L
+    100098: JT_Hip_R
+    100100: JT_Knee_L
+    100102: JT_Knee_R
+    100104: JT_Neck
+    100106: JT_Palm_L
+    100108: JT_Palm_R
+    100110: JT_Shoulder_L
+    100112: JT_Shoulder_R
+    100114: JT_Spine1
+    100116: JT_Spine2
+    100118: JT_Spine3
+    100120: JT_ThumbBase_L
+    100122: JT_ThumbBase_R
+    100124: JT_ThumbMid_L
+    100126: JT_ThumbMid_R
+    100128: JT_ThumbTip_L
+    100130: JT_ThumbTip_R
+    100132: JT_Toe_L
+    100134: JT_Toe_R
+    100136: JT_ToeTip_L
+    100138: JT_ToeTip_R
+    100140: JT_Wrist_L
+    100142: JT_Wrist_R
+    100144: //RootNode
+    400000: Eye_L1
+    400002: JT_Ankle_L
+    400004: JT_Ankle_R
+    400006: JT_Base
+    400008: JT_Clavicle_L
+    400010: JT_Clavicle_R
+    400012: JT_Elbow_L
+    400014: JT_Elbow_R
+    400016: JT_Eye_L
+    400018: JT_Eye_R
+    400020: JT_Eyelid_L
+    400022: JT_Eyelid_R
+    400024: JT_EyelidBottom_L
+    400026: JT_EyelidBottom_R
+    400028: JT_Finger1Base_L
+    400030: JT_Finger1Base_R
+    400032: JT_Finger1End_L
+    400034: JT_Finger1End_R
+    400036: JT_Finger1Mid_L
+    400038: JT_Finger1Mid_R
+    400040: JT_Finger1Tip_L
+    400042: JT_Finger1Tip_R
+    400044: JT_Finger2Base_L
+    400046: JT_Finger2Base_R
+    400048: JT_Finger2End_L
+    400050: JT_Finger2End_R
+    400052: JT_Finger2Mid_L
+    400054: JT_Finger2Mid_R
+    400056: JT_Finger2Tip_L
+    400058: JT_Finger2Tip_R
+    400060: JT_Finger3Base_L
+    400062: JT_Finger3Base_R
+    400064: JT_Finger3End_L
+    400066: JT_Finger3End_R
+    400068: JT_Finger3Mid_L
+    400070: JT_Finger3Mid_R
+    400072: JT_Finger3Tip_L
+    400074: JT_Finger3Tip_R
+    400076: JT_Finger4Base_L
+    400078: JT_Finger4Base_R
+    400080: JT_Finger4End_L
+    400082: JT_Finger4End_R
+    400084: JT_Finger4Mid_L
+    400086: JT_Finger4Mid_R
+    400088: JT_Finger4Tip_L
+    400090: JT_Finger4Tip_R
+    400092: JT_Head
+    400094: JT_HeadTop
+    400096: JT_Hip_L
+    400098: JT_Hip_R
+    400100: JT_Knee_L
+    400102: JT_Knee_R
+    400104: JT_Neck
+    400106: JT_Palm_L
+    400108: JT_Palm_R
+    400110: JT_Shoulder_L
+    400112: JT_Shoulder_R
+    400114: JT_Spine1
+    400116: JT_Spine2
+    400118: JT_Spine3
+    400120: JT_ThumbBase_L
+    400122: JT_ThumbBase_R
+    400124: JT_ThumbMid_L
+    400126: JT_ThumbMid_R
+    400128: JT_ThumbTip_L
+    400130: JT_ThumbTip_R
+    400132: JT_Toe_L
+    400134: JT_Toe_R
+    400136: JT_ToeTip_L
+    400138: JT_ToeTip_R
+    400140: JT_Wrist_L
+    400142: JT_Wrist_R
+    400144: //RootNode
+    4300000: Eye_L1
+    7400000: LeanLeft
+    9500000: //RootNode
+    13700000: Eye_L1
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -6,17 +6,16 @@ public class Movement : MonoBehaviour {
 
     private Vector3 acceleration;
     private Vector3 velocity;
-    private bool aDown;
-    private bool dDown;
-    private bool wDown;
     private bool applyGrav;
     private bool jump;
+    private bool left;
+    private bool right;
 
     private float yStart;
     private float xStart;
     private float zStart;
     public float boundaryLength;
-    public float sideSpeed;
+    private float sideSpeed;
     public GameObject world;
 
     private float rotation;
@@ -55,6 +54,8 @@ public class Movement : MonoBehaviour {
         collidingWithRamp = false;
         justLeftRamp = false;
         jump = false;
+        left = false;
+        right = false;
         finishedSpinningOut = true;
         lockMovement = false;
 
@@ -86,24 +87,24 @@ public class Movement : MonoBehaviour {
         if (Input.GetKeyDown("d"))
         {
             acceleration += new Vector3(sideSpeed, 0, 0);
-            dDown = true;
+            right = true;
         }
         if (Input.GetKeyUp("d"))
         {
             acceleration -= new Vector3(sideSpeed, 0, 0);
-            dDown = false;
+            right = false;
         }
 
         // a key
         if (Input.GetKeyDown("a"))
         {
             acceleration += new Vector3(-sideSpeed, 0, 0);
-            aDown = true;
+            left = true;
         }
         if (Input.GetKeyUp("a"))
         {
             acceleration -= new Vector3(-sideSpeed, 0, 0);
-            aDown = false;
+            left = false;
         }
 
 
@@ -200,9 +201,10 @@ public class Movement : MonoBehaviour {
             Vector3 overflowVec = new Vector3(-1 * (transform.position.x + (xStart + boundaryLength)), 0, 0);
             transform.Translate(overflowVec, Space.World);
         }
-
         
         gameObject.GetComponent<Animator>().SetBool("Jumping", jump);
+        gameObject.GetComponent<Animator>().SetBool("Left", left);
+        gameObject.GetComponent<Animator>().SetBool("Right", right);
     }
     
     void ExitCollideWithObstacle()
