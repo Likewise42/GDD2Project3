@@ -7,7 +7,7 @@ public class ColdCashMagnet : MonoBehaviour
 
     private GameObject coldCash;
 
-    private List<GameObject> CCList;
+    private List<GameObject> CCList = new List<GameObject>();
 
     // Use this for initialization
     void Start()
@@ -19,7 +19,7 @@ public class ColdCashMagnet : MonoBehaviour
     void Update()
     {
 
-
+        // every frame, check if there are null values in the CCList
 
         // if there is cold cash in our CCList
         if (CCList.Count > 0)
@@ -27,19 +27,28 @@ public class ColdCashMagnet : MonoBehaviour
             // for all cold cash objects in our CCList
             foreach (GameObject coldCash in CCList)
             {
-                // if there is cold cash, we want to adjust its 'x' position to be the same as the player's 'x' postion
-                if (coldCash.transform.position.x > transform.position.x)
+                if(coldCash != null)
                 {
-                    Vector3 tempColdCashVec = coldCash.transform.position;
-                    tempColdCashVec.x--;
-                    coldCash.transform.position = tempColdCashVec;
+
+                    // if there is cold cash, we want to adjust its 'x' position to be the same as the player's 'x' postion
+                    if (coldCash.transform.position.x > transform.position.x)
+                    {
+                        Vector3 tempColdCashVec = coldCash.transform.position;
+                        tempColdCashVec.x--;
+                        coldCash.transform.position = tempColdCashVec;
+                    }
+                    else if (coldCash.transform.position.x < transform.position.x)
+                    {
+                        Vector3 tempColdCashVec = coldCash.transform.position;
+                        tempColdCashVec.x++;
+                        coldCash.transform.position = tempColdCashVec;
+                    }
                 }
-                else if (coldCash.transform.position.x < transform.position.x)
+                else // remove the cold cash
                 {
-                    Vector3 tempColdCashVec = coldCash.transform.position;
-                    tempColdCashVec.x++;
-                    coldCash.transform.position = tempColdCashVec;
+                    CCList.Remove(coldCash);
                 }
+
             }
         }
         
@@ -64,7 +73,7 @@ public class ColdCashMagnet : MonoBehaviour
         GameObject otherObj = other.gameObject;
         if(otherObj.tag == "ColdCash")
         {
-            CCList.RemoveAt(CCList.Count - 1);
+            CCList.Remove(otherObj);
         }
     }
 
