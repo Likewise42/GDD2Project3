@@ -19,6 +19,8 @@ public class ColdCashMagnet : MonoBehaviour
     void Update()
     {
 
+
+
         // if there is cold cash in our CCList
         if (CCList.Count > 0)
         {
@@ -46,7 +48,7 @@ public class ColdCashMagnet : MonoBehaviour
         // Here, we should check if the player has touched the cold cash. If so, the cold cash object here will be removed
         // Otherwise, all Cold Cash received by the player will effectively populate the CCList for no reason.
     }
-
+		
 
     void OnTriggerEnter(Collider other)
     {
@@ -57,7 +59,7 @@ public class ColdCashMagnet : MonoBehaviour
         }
     }
 
-    void onTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
         GameObject otherObj = other.gameObject;
         if(otherObj.tag == "ColdCash")
