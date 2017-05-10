@@ -17,7 +17,7 @@ public class WorldSpin : MonoBehaviour {
         speed = 0.0f;
         //maxSpeed = 4.0f;
         camOriginal = cam.transform.position;
-        sb = GameObject.FindGameObjectWithTag("snowboard").GetComponent<Snowboard>();
+        sb = GameObject.FindGameObjectWithTag("Snowboard").GetComponent<Snowboard>();
 	}
 	
 	// Update is called once per frame

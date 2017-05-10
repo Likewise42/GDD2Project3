@@ -169,7 +169,7 @@ public class Movement : MonoBehaviour {
         }
         else
         {
-            gameObject.transform.eulerAngles = new Vector3(0, 90, 0);
+            gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
 
