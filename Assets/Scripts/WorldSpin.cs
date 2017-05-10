@@ -22,6 +22,7 @@ public class WorldSpin : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
         this.transform.Rotate(new Vector3(0f, speed * Time.deltaTime, 0f));
         speed += sb.acceleration;
 

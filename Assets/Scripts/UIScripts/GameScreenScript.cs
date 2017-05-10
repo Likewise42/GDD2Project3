@@ -72,8 +72,9 @@ public class GameScreenScript : MonoBehaviour {
         float size = Mathf.Lerp(airScoreMinSize, airScoreMaxSize, percentToMax);
         Color color = Color.Lerp(airStartColor, airEndColor, percentToMax);
 
-        AirScore.text = "<size=" + size + ">" + airScore + "<size>";
+        AirScore.text = "" + airScore;
         AirScore.color = color;
+        AirScore.fontSize = (int)size;
     }
 
     public void hideAirScore()

@@ -42,6 +42,17 @@ public class LevelManager : MonoBehaviour {
 
     public uint airSizeMaxScore;
 
+    private bool airborne = false;
+
+    public int airScorePerNFrames;
+    public int airScoreNFramesTick;
+    public uint airScoreBase = 100;
+
+    private uint timesPassedAirScore = 1;
+    private int airscoreFrameCount = 0;
+
+
+
     private uint currentColdCash;
     private uint score;
     private float slalomMultiplier = 0;
@@ -49,8 +60,6 @@ public class LevelManager : MonoBehaviour {
     private bool stopSpawning;
     private bool slalomEvent;
     private int currentSlalomCheckpointCount;
-
-    private bool airborne = false;
 
     public GameScreenScript gameScreen;
     public GameObject SpawnerObj;
@@ -81,6 +90,19 @@ public class LevelManager : MonoBehaviour {
             return;
         }
 
+        if (airborne)
+        {
+            if(airscoreFrameCount == airScoreNFramesTick)
+            {
+                addAirborneScore(airScoreBase * timesPassedAirScore);
+                airscoreFrameCount = 0;
+                timesPassedAirScore++;
+            }
+            else
+            {
+                airscoreFrameCount++;
+            }
+        }
         timeInSeconds += Time.deltaTime;
         if (slalomEvent)
         {
@@ -144,23 +166,23 @@ public class LevelManager : MonoBehaviour {
                 spawner.CreateColdCash();
             }
 
-            if (ShouldSpawnPickup())
-            {
-                // Randomly choose a pickup to spawn		
-                float decision = Random.Range(0, 1.0f);
-                if (decision < 0.33f)
-                {
-                    spawner.CreateBoostPickup();
-                }
-                else if (decision < 0.66f)
-                {
-                    spawner.CreateCashBonusPickup();
-                }
-                else
-                {
-                    spawner.CreateMultiplierPickup();
-                }
-            }
+            //if (ShouldSpawnPickup())
+            //{
+            //    // Randomly choose a pickup to spawn		
+            //    float decision = Random.Range(0, 1.0f);
+            //    if (decision < 0.33f)
+            //    {
+            //        spawner.CreateBoostPickup();
+            //    }
+            //    else if (decision < 0.66f)
+            //    {
+            //        spawner.CreateCashBonusPickup();
+            //    }
+            //    else
+            //    {
+            //        spawner.CreateMultiplierPickup();
+            //    }
+            //}
 
             obstacleSpawnTimer++;
             rampSpawnTimer++;
@@ -258,26 +280,29 @@ public class LevelManager : MonoBehaviour {
 
     public void startAirScore()
     {
-
+        airborne = true;
+        airscoreFrameCount = airScoreNFramesTick;
     }
 
     public void endAirScore()
     {
-
+        airborne = false;
+        flushAirborneScore();
+        timesPassedAirScore = 1;
     }
 
     private void addAirborneScore(uint score)
     {
         airborneScore += score;
-        
         gameScreen.setAirScore(airborneScore, (float)airborneScore/airSizeMaxScore);
     }
 
     private void flushAirborneScore()
     {
-        score += airborneScore;
+        addScore(airborneScore);
         airborneScore = 0;
-
+        airscoreFrameCount = 0;
+        gameScreen.hideAirScore();
     }
 
     public void addScore(uint score)

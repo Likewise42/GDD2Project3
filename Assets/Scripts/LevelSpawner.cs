@@ -188,9 +188,13 @@ public class LevelSpawner : MonoBehaviour {
     
     public GameObject CreateLevelEnd()
     {
-        return CreateObject(levelEndPrefab,
-                            new Vector3(0, 3, 0),
-                            null);
+        GameObject newObject = Instantiate(levelEndPrefab, startPos, startRot);
+
+        newObject.transform.Translate(new Vector3(0, 10, 0));
+        newObject.transform.Rotate(new Vector3(0, 1, 0), 90);
+        newObject.transform.parent = levelObj.transform;
+        
+        return newObject;
     }
 
     public GameObject CreateSlalomFlag()
