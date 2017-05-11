@@ -9,12 +9,13 @@ public class YetiMovement : MonoBehaviour {
     private bool isRunning;
     private KeyCode run;
     private float speed;
-    public float initalY;
+    private float initalY;
 
 	// Use this for initialization
 	void Start () {
         rotation = new Vector3(0, 0, 0);
         run = KeyCode.LeftShift;
+        initalY = gameObject.transform.position.y;
 	}
 	
 	// Update is called once per frame

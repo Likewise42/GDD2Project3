@@ -7,7 +7,6 @@ public class Movement : MonoBehaviour {
     private Vector3 acceleration;
     private Vector3 velocity;
     private bool applyGrav;
-    private bool jump;
     private bool left;
     private bool right;
 
@@ -53,7 +52,6 @@ public class Movement : MonoBehaviour {
 
         collidingWithRamp = false;
         justLeftRamp = false;
-        jump = false;
         left = false;
         right = false;
         finishedSpinningOut = true;
@@ -138,7 +136,6 @@ public class Movement : MonoBehaviour {
         if (collidingWithRamp)
         {
             transform.Translate(new Vector3(0, 0.5f, 0));
-            jump = true;
         }
         else if(!collidingWithRamp && justLeftRamp && resetRampJumping)
         {
@@ -146,7 +143,6 @@ public class Movement : MonoBehaviour {
             airborne = true;
             acceleration.y += world.GetComponent<WorldSpin>().speed / 9f + (transform.position.y - yStart) / 9f;
             justLeftRamp = false;
-            jump = false;
             resetRampJumping = false;
         }
 
@@ -202,7 +198,6 @@ public class Movement : MonoBehaviour {
             transform.Translate(overflowVec, Space.World);
         }
         
-        gameObject.GetComponent<Animator>().SetBool("Jumping", jump);
         gameObject.GetComponent<Animator>().SetBool("Left", left);
         gameObject.GetComponent<Animator>().SetBool("Right", right);
     }
