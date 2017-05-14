@@ -12,7 +12,7 @@ public class YetiGameData {
 
     public enum YetiType { LankyYeti,NormalYeti};
     
-    public enum BoardType { NormalBoard,ATATBoard, WampBoard,CashBoard,YetiBoard};
+    public enum BoardType { NormalBoard, ATATBoard, WampBoard,CashBoard,YetiBoard};
 
 
     public static YetiType SelectedYeti = YetiType.NormalYeti;

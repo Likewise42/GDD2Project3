@@ -11,6 +11,9 @@ public class yetiShop : MonoBehaviour {
     public Text costText;
     public Text descText;
 
+    public Text purchaseButtonTextYeti;
+    public Text purchaseButtonTextBoard;
+
     public GameObject yetiViewPanel;
     public GameObject viewsPanel;
     public GameObject exitPanel;
@@ -40,18 +43,33 @@ public class yetiShop : MonoBehaviour {
         }
     }
 
-    public void setYetiView(string name, int cost, string description)
+    public void setYetiView(string name, int cost, string description,bool purchased = false)
     {
         nameText.text = name;
         costText.text = "$" + cost;
+        purchaseButtonTextYeti.text = "Buy";
+
+
+        if (purchased)
+        {
+            costText.text = " Owned";
+            purchaseButtonTextYeti.text = "Equip";
+        }
         descText.text = description;
         yetiViewPanel.SetActive(true);
     }
 
-    public void setBoardView(string name, int cost, string description)
+    public void setBoardView(string name, int cost, string description, bool purchased = false)
     {
         boardNameText.text = name;
         boardCostText.text = "$" + cost;
+
+        if (purchased)
+        {
+            boardCostText.text = " Owned";
+            purchaseButtonTextBoard.text = "Equip";
+        }
+
         boardDescText.text = description;
         boardViewPanel.SetActive(true);
     }

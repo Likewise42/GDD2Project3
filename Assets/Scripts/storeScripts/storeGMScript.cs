@@ -8,13 +8,15 @@ public class board
     public int cost;
     public string desc;
     public GameObject boardObject;
+    public YetiGameData.BoardType boardType;
 
-    public board(string Name, int Cost, string Desc, GameObject Board)
+    public board(string Name, int Cost, string Desc, GameObject Board, YetiGameData.BoardType BoardType)
     {
         name = Name;
         cost = Cost;
         desc = Desc;
         boardObject = Board;
+        boardType = BoardType;
     }
 }
 
@@ -69,6 +71,7 @@ public class storeGMScript : MonoBehaviour
         currentBoard = 0;
 
 
+
         //targetTransform = startingCameraTransform;
 
         mainCamera.enabled = true;
@@ -80,19 +83,19 @@ public class storeGMScript : MonoBehaviour
         
 
         //default board
-        boardArray[0] = new board("Basic Board", 0, "A basic board to start you off.", snowBoard1);
+        boardArray[0] = new board("Basic Board", 0, "A basic board to start you off.", snowBoard1, YetiGameData.BoardType.NormalBoard);
 
         //sideSpeed board
-        boardArray[1] = new board("Agile Board", 5, "A board that handles well, allowing you to move side to side easier.", snowBoard2);
+        boardArray[1] = new board("Agile Board", 5, "A board that handles well, allowing you to move side to side easier.", snowBoard2, YetiGameData.BoardType.YetiBoard);
 
         //accel board
-        boardArray[2] = new board("Sleek Board", 10, "This board is slimmer and sleeker then the others, allowing you to reach your top speeds faster!", snowBoard3);
+        boardArray[2] = new board("Sleek Board", 10, "This board is slimmer and sleeker then the others, allowing you to reach your top speeds faster!", snowBoard3, YetiGameData.BoardType.WampBoard);
 
         //mag board
-        boardArray[3] = new board("Magnetic Board", 15, "This board has a built in Cold Cash magnet!", snowBoard4);
+        boardArray[3] = new board("Magnetic Board", 15, "This board has a built in Cold Cash magnet!", snowBoard4, YetiGameData.BoardType.ATATBoard);
 
         //c val board
-        boardArray[4] = new board("Money Board", 20, "A board with the inate ability to make Cold Cash more valuable.", snowBoard5);
+        boardArray[4] = new board("Money Board", 20, "A board with the inate ability to make Cold Cash more valuable.", snowBoard5, YetiGameData.BoardType.CashBoard);
 
 
         whichView = 1;
@@ -100,7 +103,10 @@ public class storeGMScript : MonoBehaviour
 
     public void buyBoard()
     {
-        Debug.Log("Buying " + boardArray[currentBoard].name);
+        YetiGameData.SelectedBoard = boardArray[currentBoard].boardType;
+
+        Debug.Log(YetiGameData.SelectedBoard);
+
     }
 
     //void disableAllCameras()
@@ -271,11 +277,14 @@ public class storeGMScript : MonoBehaviour
             //rightCamera.enabled = true;
         }
 
+        disableRotating();
+
         //decide which controls to use
         //if looking at yetis
-        if(whichView == 2)
+        if (whichView == 2)
         {
             rightCameraControls();
+
 
             shopScript.setYetiView("Jim", 3, "DESC");
         }
@@ -283,8 +292,6 @@ public class storeGMScript : MonoBehaviour
         else if (whichView == 3)
         {
             leftCameraControls();
-
-            disableRotating();
 
             shopScript.setBoardView(boardArray[currentBoard].name, boardArray[currentBoard].cost, boardArray[currentBoard].desc);
 
