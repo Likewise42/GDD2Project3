@@ -173,6 +173,11 @@ public class GameScreenScript : MonoBehaviour {
     {
         foreach (GameObject go in ThingsToMakeGoAway)
         {
+            if(go.GetComponent<Movement>() != null)
+            {
+                if (go.GetComponent<Movement>().yetiType != YetiGameData.SelectedYeti)
+                    continue;
+            }
             go.SetActive(active);
         }
     }

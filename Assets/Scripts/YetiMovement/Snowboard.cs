@@ -10,6 +10,8 @@ public class Snowboard : MonoBehaviour {
     public bool coinValueBoard;
     public bool defaultBoard;
 
+    public YetiGameData.BoardType boardType;
+
     public float acceleration;
     public float maxSpeed;
     public float sideSpeed;

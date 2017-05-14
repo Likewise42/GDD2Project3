@@ -17,6 +17,8 @@ public class Movement : MonoBehaviour {
     private float sideSpeed;
     public GameObject world;
 
+    public YetiGameData.YetiType yetiType;
+
     private float rotation;
 
     public LevelManager lManager;
