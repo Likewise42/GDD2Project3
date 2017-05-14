@@ -95,7 +95,7 @@ public class storeGMScript : MonoBehaviour
         boardArray[3] = new board("Magnetic Board", 300, "This board has a built in Cold Cash magnet!", snowBoard4, YetiGameData.BoardType.ATATBoard);
 
         //c val board
-        boardArray[4] = new board("Money Board", 500, "A board with the inate ability to make Cold Cash more valuable.", snowBoard5, YetiGameData.BoardType.CashBoard);
+        boardArray[4] = new board("Money Board", 500, "A board with the innate ability to make Cold Cash more valuable.", snowBoard5, YetiGameData.BoardType.CashBoard);
 
 
         whichView = 1;
@@ -104,10 +104,17 @@ public class storeGMScript : MonoBehaviour
     public void buyBoard()
     {
 
-        if(YetiGameData.ColdCash >= boardArray[currentBoard].cost)
+        if(YetiGameData.ColdCash >= boardArray[currentBoard].cost && !YetiGameData.boardBoughtArray[currentBoard])
         {
             YetiGameData.ColdCash -= boardArray[currentBoard].cost;
 
+            YetiGameData.SelectedBoard = boardArray[currentBoard].boardType;
+
+            YetiGameData.boardBoughtArray[currentBoard] = true;
+
+            Debug.Log(YetiGameData.SelectedBoard);
+        }else if (YetiGameData.boardBoughtArray[currentBoard])
+        {
             YetiGameData.SelectedBoard = boardArray[currentBoard].boardType;
 
             Debug.Log(YetiGameData.SelectedBoard);
@@ -300,7 +307,7 @@ public class storeGMScript : MonoBehaviour
         {
             leftCameraControls();
 
-            shopScript.setBoardView(boardArray[currentBoard].name, (int) boardArray[currentBoard].cost, boardArray[currentBoard].desc);
+            shopScript.setBoardView(boardArray[currentBoard].name, (int) boardArray[currentBoard].cost, boardArray[currentBoard].desc, YetiGameData.boardBoughtArray[currentBoard]);
 
             boardArray[currentBoard].boardObject.GetComponent<RotateObjects>().rotating = true;
         }
