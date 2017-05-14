@@ -7,13 +7,14 @@ public class board
     public string name;
     public int cost;
     public string desc;
+    public GameObject boardObject;
 
-
-    public board(string Name, int Cost, string Desc)
+    public board(string Name, int Cost, string Desc, GameObject Board)
     {
         name = Name;
         cost = Cost;
         desc = Desc;
+        boardObject = Board;
     }
 }
 
@@ -31,6 +32,12 @@ public class storeGMScript : MonoBehaviour
     public Transform clerkCameraTransform;
 
     public Transform targetTransform;
+
+    public GameObject snowBoard1;
+    public GameObject snowBoard2;
+    public GameObject snowBoard3;
+    public GameObject snowBoard4;
+    public GameObject snowBoard5;
 
     //public Vector3 acceleration;
     public Vector3 velocity;
@@ -73,19 +80,19 @@ public class storeGMScript : MonoBehaviour
         
 
         //default board
-        boardArray[0] = new board("Basic Board", 0, "A basic board to start you off.");
+        boardArray[0] = new board("Basic Board", 0, "A basic board to start you off.", snowBoard1);
 
         //sideSpeed board
-        boardArray[1] = new board("Agile Board", 5, "A board that handles well, allowing you to move side to side easier.");
+        boardArray[1] = new board("Agile Board", 5, "A board that handles well, allowing you to move side to side easier.", snowBoard2);
 
         //accel board
-        boardArray[2] = new board("Sleek Board", 10, "This board is slimmer and sleeker then the others, allowing you to reach your top speeds faster!");
+        boardArray[2] = new board("Sleek Board", 10, "This board is slimmer and sleeker then the others, allowing you to reach your top speeds faster!", snowBoard3);
 
         //mag board
-        boardArray[3] = new board("Magnetic Board", 15, "This board has a built in Cold Cash magnet!");
+        boardArray[3] = new board("Magnetic Board", 15, "This board has a built in Cold Cash magnet!", snowBoard4);
 
         //c val board
-        boardArray[4] = new board("Money Board", 20, "A board with the inate ability to make Cold Cash more valuable.");
+        boardArray[4] = new board("Money Board", 20, "A board with the inate ability to make Cold Cash more valuable.", snowBoard5);
 
 
         whichView = 1;
@@ -104,6 +111,15 @@ public class storeGMScript : MonoBehaviour
     //    clerkCamera.enabled = false;
     //}
 
+    public void disableRotating()
+    {
+        boardArray[0].boardObject.GetComponent<RotateObjects>().rotating = false;
+        boardArray[1].boardObject.GetComponent<RotateObjects>().rotating = false;
+        boardArray[2].boardObject.GetComponent<RotateObjects>().rotating = false;
+        boardArray[3].boardObject.GetComponent<RotateObjects>().rotating = false;
+        boardArray[4].boardObject.GetComponent<RotateObjects>().rotating = false;
+    }
+        
     //https://gamedev.stackexchange.com/questions/121469/unity3d-smooth-rotation-for-seek-steering-behavior
     void seek(Transform target)
     {
@@ -268,7 +284,11 @@ public class storeGMScript : MonoBehaviour
         {
             leftCameraControls();
 
+            disableRotating();
+
             shopScript.setBoardView(boardArray[currentBoard].name, boardArray[currentBoard].cost, boardArray[currentBoard].desc);
+
+            boardArray[currentBoard].boardObject.GetComponent<RotateObjects>().rotating = true;
         }
 
 

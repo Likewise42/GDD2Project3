@@ -19,7 +19,7 @@ public class RotateObjects : MonoBehaviour {
 	void Update () {
         if (rotating)
         {
-            this.transform.Rotate(new Vector3(0, 20 * Time.deltaTime, 0), Space.World);
+            this.transform.Rotate(new Vector3(0, 40 * Time.deltaTime, 0), Space.World);
             this.transform.Translate(0, Mathf.Sin(Time.time * 2) * .005f, 0, Space.World);
         }
         else
