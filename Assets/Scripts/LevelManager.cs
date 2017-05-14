@@ -7,12 +7,12 @@ using UnityEngine;
 /// </summary>
 public class LevelManager : MonoBehaviour {
 
-    public const float OBSTACLE_SPAWN_INTERVAL = 90;
+    public const float OBSTACLE_SPAWN_INTERVAL = 50;
     public const float RAMP_SPAWN_INTERVAL = 240;
     public const float CASH_SPAWN_INTERVAL = 80;
     public const float PICKUP_SPAWN_INTERVAL = 480;
     public const float TIME_TO_SLALOM = 1100;
-    public const float LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
+    public const float LEVEL_END_SPAWN_INTERVAL = 4200;   // 1 minute level
 
     // Slalom-specific constants
     public const int NUMBER_OF_SLALOMS = 10;
