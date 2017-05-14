@@ -7,17 +7,17 @@ using UnityEngine;
 /// </summary>
 public class LevelManager : MonoBehaviour {
 
-    public const float OBSTACLE_SPAWN_INTERVAL = 120;
-    public const float RAMP_SPAWN_INTERVAL = 120;
+    public const float OBSTACLE_SPAWN_INTERVAL = 90;
+    public const float RAMP_SPAWN_INTERVAL = 240;
     public const float CASH_SPAWN_INTERVAL = 80;
-    public const float PICKUP_SPAWN_INTERVAL = 140;
-    public const float TIME_TO_SLALOM = 600;
+    public const float PICKUP_SPAWN_INTERVAL = 480;
+    public const float TIME_TO_SLALOM = 900;
     public const float LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
 
     // Slalom-specific constants
     public const int NUMBER_OF_SLALOMS = 10;
     private const float SLALOM_CHECKPOINT_TIMER = 10;
-    public const float TIME_BETWEEN_SLALOMS = 120;
+    public const float TIME_BETWEEN_SLALOMS = 80;
 
     public const float SLALOM_MULT_DELTA = .05f;
 
@@ -171,25 +171,23 @@ public class LevelManager : MonoBehaviour {
                 spawner.CreateColdCash();
             }
 
-            //if (ShouldSpawnPickup())
-            //{
-            //    // Randomly choose a pickup to spawn		
-            //    float decision = Random.Range(0, 1.0f);
-            //    if (decision < 0.33f)
-            //    {
-            //        spawner.CreateBoostPickup();
-            //    }
-            //    else if (decision < 0.66f)
-            //    {
-            //        spawner.CreateCashBonusPickup();
-            //    }
-            //    else
-            //    {
-            //        spawner.CreateMultiplierPickup();
-            //    }
-            //}
-
-            //const int mult = 100
+            if (ShouldSpawnPickup())
+            {
+                // Randomly choose a pickup to spawn		
+                float decision = Random.Range(0, 1.0f);
+                if (decision < 0.33f)
+                {
+                    spawner.CreateBoostPickup();
+                }
+                else if (decision < 0.66f)
+                {
+                    spawner.CreateCashBonusPickup();
+                }
+                else
+                {
+                    spawner.CreateMultiplierPickup();
+                }
+            }
             
             obstacleSpawnTimer += timePassed;
             rampSpawnTimer += timePassed;
