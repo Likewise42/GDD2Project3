@@ -174,8 +174,13 @@ public class LevelSpawner : MonoBehaviour {
     
     public GameObject CreateRamp()
     {
+        float xPos = Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
+        CreateObject(coldCashPrefab,
+                            new Vector3(xPos, 17, 25),
+                            coldcash);
+
         return CreateObject(rampPrefab,
-                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 0, 0),
+                            new Vector3(xPos, 0, 0),
                             ramps);
     }
     
@@ -214,21 +219,21 @@ public class LevelSpawner : MonoBehaviour {
     public GameObject CreateBoostPickup()
     {
         return CreateObject(BoostPickupPrefab,
-                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 3, 0),
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 6, 0),
                             pickups);
     }
 
     public GameObject CreateCashBonusPickup()
     {
         return CreateObject(CashBonusPickupPrefab,
-                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 3, 0),
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 6, 0),
                             pickups);
     }
 
     public GameObject CreateMultiplierPickup()
     {
         return CreateObject(MultiplierPickupPrefab,
-                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 3, 0),
+                            new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 6, 0),
                             pickups);
     }
 
