@@ -318,7 +318,7 @@ public class LevelManager : MonoBehaviour {
 
     public void addColdCash(uint coldCashAmount)
     {
-        YetiGameData.ColdCash += (uint)YetiGameData.coldCashMultiplier;
+        YetiGameData.ColdCash += coldCashAmount /*(uint)YetiGameData.coldCashMultiplier*/;
         currentColdCash += coldCashAmount;
         addScore(coldCashScore);
     }

@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour {
     public LevelManager lManager;
 
     // A little janky to have this in player, but. . .
-    public uint coldCashMultiplier = 1;
+    public uint coldCashMultiplier;
     public float coldCashBonusTimer = 0;
     public const float COLD_CASH_BONUS_DURATION = LevelManager.PICKUP_SPAWN_INTERVAL - 5; // same as how long it takes to spawn a new one so they don't overlap
 
@@ -62,7 +62,7 @@ public class Movement : MonoBehaviour {
 
         // reset everything to default values
         sideSpeed = 2;
-        coldCashMultiplier = 1;
+        coldCashMultiplier = 50;
         boardBasedAcceleration = 0.1f;
 
         switch (YetiGameData.SelectedBoard)
@@ -239,7 +239,7 @@ public class Movement : MonoBehaviour {
     void CollideWithColdCash()
     {
 
-        
+        Debug.Log("Cold cash multiplier: " + coldCashMultiplier);
         lManager.addColdCash(coldCashMultiplier);
 
         if(!this.GetComponent<AudioSource>().isPlaying)
