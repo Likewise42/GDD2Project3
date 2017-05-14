@@ -24,16 +24,13 @@ public class Movement : MonoBehaviour {
     public LevelManager lManager;
 
     // A little janky to have this in player, but. . .
-    public int coldCashMultiplier = 1;
+    public uint coldCashMultiplier = 1;
     public float coldCashBonusTimer = 0;
-    public const int COLD_CASH_BONUS_DURATION = 900; // 15 seconds
+    public const float COLD_CASH_BONUS_DURATION = LevelManager.PICKUP_SPAWN_INTERVAL - 5; // same as how long it takes to spawn a new one so they don't overlap
 
     private float lastJumpForce;
 
-    private bool sideSpeedBoard;
-    private bool magnetSeekBoard;
-    private bool accelerationBoard;
-    private bool coinValueBoard;
+    public float boardBasedAcceleration;
 
     private bool airborne = false;
 
@@ -56,24 +53,38 @@ public class Movement : MonoBehaviour {
         justLeftRamp = false;
         left = false;
         right = false;
-        finishedSpinningOut = true;
         lockMovement = false;
-
-        // Which board do I have?
-        sb = gameObject.GetComponentInChildren<Snowboard>();
-        sideSpeed = sb.sideSpeed;
-
-        sideSpeedBoard = sb.sideSpeedBoard; // implemented
-        magnetSeekBoard = sb.magnetSeekBoard; // not implemented
-        accelerationBoard = sb.accelerationBoard; // not implemented
-        coinValueBoard = sb.coinValueBoard; // implemented
+        finishedSpinningOut = true;
+        
 
         rotation = 0;
 
-        if (sideSpeedBoard)
+
+        // reset everything to default values
+        sideSpeed = 2;
+        coldCashMultiplier = 1;
+        boardBasedAcceleration = 0.1f;
+
+        switch (YetiGameData.SelectedBoard)
         {
-            sideSpeed = 4;
-        }
+            case (YetiGameData.BoardType.YetiBoard): // agile board
+                sideSpeed = 4;
+                break;
+            case (YetiGameData.BoardType.CashBoard): // cash board
+                coldCashMultiplier = 2;
+                break;
+            case (YetiGameData.BoardType.ATATBoard): // magnet board
+                //coldCashMultiplier = 2;
+                Debug.Log("Using the magnet board");
+                break;
+            case (YetiGameData.BoardType.WampBoard): // acceleration board
+                boardBasedAcceleration = 0.2f;
+                break;
+            case (YetiGameData.BoardType.NormalBoard): // default board
+                break;
+            default:
+                break;
+        } 
 
     }
 
@@ -82,6 +93,16 @@ public class Movement : MonoBehaviour {
     {
         acceleration = Vector3.zero;
 
+
+        // Handle cashbonus real quick, if necessary
+        if (coldCashBonusTimer > 0)
+        {
+            coldCashBonusTimer -= 100 * Time.deltaTime;
+            if (coldCashBonusTimer <= 0)
+            {
+                coldCashMultiplier -= 1;  // If pickup duration over, reset cold cash to normal values
+            } 
+        }
 
         // d key
         if (Input.GetKeyDown("d"))
@@ -217,11 +238,10 @@ public class Movement : MonoBehaviour {
 
     void CollideWithColdCash()
     {
-        if(coinValueBoard)
-        {
-            lManager.addColdCash(2);
-        }
-        lManager.addColdCash(1);
+
+        
+        lManager.addColdCash(coldCashMultiplier);
+
         if(!this.GetComponent<AudioSource>().isPlaying)
         {
             this.GetComponent<AudioSource>().Play();
@@ -235,7 +255,7 @@ public class Movement : MonoBehaviour {
 
     void CollideWithCashBonus()
     {
-        coldCashMultiplier = 2;
+        coldCashMultiplier += 1;
         coldCashBonusTimer = COLD_CASH_BONUS_DURATION;
     }
 
