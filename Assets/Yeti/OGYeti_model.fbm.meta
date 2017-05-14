@@ -1,8 +1,14 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+guid: 97fe8b9f921ea2845aee483438400d14
+folderAsset: yes
+timeCreated: 1494623417
+=======
 guid: ef369e5e7c71c154bbfe67b490ab56f0
 folderAsset: yes
 timeCreated: 1494789170
 licenseType: Pro
+>>>>>>> 9b2f020e1fdf1c6c3c7779a628628307cab72e17
 DefaultImporter:
   userData: 
   assetBundleName: 
