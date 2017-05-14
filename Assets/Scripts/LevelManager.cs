@@ -7,28 +7,28 @@ using UnityEngine;
 /// </summary>
 public class LevelManager : MonoBehaviour {
 
-    public const int OBSTACLE_SPAWN_INTERVAL = 120;
-    public const int RAMP_SPAWN_INTERVAL = 120;
-    public const int CASH_SPAWN_INTERVAL = 80;
-    public const int PICKUP_SPAWN_INTERVAL = 140;
-    public const int TIME_TO_SLALOM = 600;
-    public const int LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
+    public const float OBSTACLE_SPAWN_INTERVAL = 120;
+    public const float RAMP_SPAWN_INTERVAL = 120;
+    public const float CASH_SPAWN_INTERVAL = 80;
+    public const float PICKUP_SPAWN_INTERVAL = 140;
+    public const float TIME_TO_SLALOM = 600;
+    public const float LEVEL_END_SPAWN_INTERVAL = 3600;   // 1 minute level
 
     // Slalom-specific constants
     public const int NUMBER_OF_SLALOMS = 10;
-    private const int SLALOM_CHECKPOINT_TIMER = 10;
-    public const int TIME_BETWEEN_SLALOMS = 120;
+    private const float SLALOM_CHECKPOINT_TIMER = 10;
+    public const float TIME_BETWEEN_SLALOMS = 120;
 
     public const float SLALOM_MULT_DELTA = .05f;
 
     public uint slalomBasePoints = 100;
     private uint gameEndTimer;
-    private int obstacleSpawnTimer;
-    private int rampSpawnTimer;
-    private int cashSpawnTimer;
-    private int pickupSpawnTimer;
-    private int levelEndSpawnTimer;
-    private int slalomTimer;
+    private float obstacleSpawnTimer;
+    private float rampSpawnTimer;
+    private float cashSpawnTimer;
+    private float pickupSpawnTimer;
+    private float levelEndSpawnTimer;
+    private float slalomTimer;
 
     public bool hitSlalom;
     private bool canSpawnSlalomCheckpoint;
@@ -51,7 +51,7 @@ public class LevelManager : MonoBehaviour {
     private uint timesPassedAirScore = 1;
     private int airscoreFrameCount = 0;
 
-
+    private GameObject levelObj;
 
     private uint currentColdCash;
     private uint score;
@@ -79,11 +79,16 @@ public class LevelManager : MonoBehaviour {
         stopSpawning = false;
 
         spawner = SpawnerObj.GetComponent<LevelSpawner>();
-	}
+
+        levelObj = GameObject.FindGameObjectWithTag("World");
+        // QualitySettings.vSyncCount = 0;  // VSync must be disabled
+        // Application.targetFrameRate = 15;
+    }
 	
 	// Update is called once per frame
 	void Update () {
 
+        float timePassed = 100 * Time.deltaTime * levelObj.GetComponent<WorldSpin>().speed / GameObject.FindGameObjectWithTag("Snowboard").GetComponent<Snowboard>().maxSpeed;
 
         if (!levelRunning)
         {
@@ -113,7 +118,7 @@ public class LevelManager : MonoBehaviour {
                 {
                     spawner.CreateSlalomFlag();
                     canSpawnSlalomCheckpoint = true;
-                    slalomTimer++;
+                    slalomTimer += timePassed;
                 }
                 else if (slalomTimer >= TIME_BETWEEN_SLALOMS)
                 {
@@ -127,7 +132,7 @@ public class LevelManager : MonoBehaviour {
                 }
                 else
                 {
-                    slalomTimer++;
+                    slalomTimer += timePassed;
                 }
             }
             else
@@ -184,12 +189,14 @@ public class LevelManager : MonoBehaviour {
             //    }
             //}
 
-            obstacleSpawnTimer++;
-            rampSpawnTimer++;
-            cashSpawnTimer++;
-            pickupSpawnTimer++;
-            levelEndSpawnTimer++;
-            slalomTimer++;
+            //const int mult = 100
+            
+            obstacleSpawnTimer += timePassed;
+            rampSpawnTimer += timePassed;
+            cashSpawnTimer += timePassed;
+            pickupSpawnTimer += timePassed;
+            levelEndSpawnTimer += timePassed;
+            slalomTimer += timePassed;
 
             gameScreen.SetDistancePercent((float)levelEndSpawnTimer / (float)LEVEL_END_SPAWN_INTERVAL);
         }
