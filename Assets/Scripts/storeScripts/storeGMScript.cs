@@ -5,12 +5,12 @@ using UnityEngine;
 public class board
 {
     public string name;
-    public int cost;
+    public uint cost;
     public string desc;
     public GameObject boardObject;
     public YetiGameData.BoardType boardType;
 
-    public board(string Name, int Cost, string Desc, GameObject Board, YetiGameData.BoardType BoardType)
+    public board(string Name, uint Cost, string Desc, GameObject Board, YetiGameData.BoardType BoardType)
     {
         name = Name;
         cost = Cost;
@@ -86,16 +86,16 @@ public class storeGMScript : MonoBehaviour
         boardArray[0] = new board("Basic Board", 0, "A basic board to start you off.", snowBoard1, YetiGameData.BoardType.NormalBoard);
 
         //sideSpeed board
-        boardArray[1] = new board("Agile Board", 5, "A board that handles well, allowing you to move side to side easier.", snowBoard2, YetiGameData.BoardType.YetiBoard);
+        boardArray[1] = new board("Agile Board", 50, "A board that handles well, allowing you to move side to side easier.", snowBoard2, YetiGameData.BoardType.YetiBoard);
 
         //accel board
-        boardArray[2] = new board("Sleek Board", 10, "This board is slimmer and sleeker then the others, allowing you to reach your top speeds faster!", snowBoard3, YetiGameData.BoardType.WampBoard);
+        boardArray[2] = new board("Sleek Board", 100, "This board is slimmer and sleeker then the others, allowing you to reach your top speeds faster!", snowBoard3, YetiGameData.BoardType.WampBoard);
 
         //mag board
-        boardArray[3] = new board("Magnetic Board", 15, "This board has a built in Cold Cash magnet!", snowBoard4, YetiGameData.BoardType.ATATBoard);
+        boardArray[3] = new board("Magnetic Board", 300, "This board has a built in Cold Cash magnet!", snowBoard4, YetiGameData.BoardType.ATATBoard);
 
         //c val board
-        boardArray[4] = new board("Money Board", 20, "A board with the inate ability to make Cold Cash more valuable.", snowBoard5, YetiGameData.BoardType.CashBoard);
+        boardArray[4] = new board("Money Board", 500, "A board with the innate ability to make Cold Cash more valuable.", snowBoard5, YetiGameData.BoardType.CashBoard);
 
 
         whichView = 1;
@@ -103,9 +103,23 @@ public class storeGMScript : MonoBehaviour
 
     public void buyBoard()
     {
-        YetiGameData.SelectedBoard = boardArray[currentBoard].boardType;
 
-        Debug.Log(YetiGameData.SelectedBoard);
+        if(YetiGameData.ColdCash >= boardArray[currentBoard].cost && !YetiGameData.boardBoughtArray[currentBoard])
+        {
+            YetiGameData.ColdCash -= boardArray[currentBoard].cost;
+
+            YetiGameData.SelectedBoard = boardArray[currentBoard].boardType;
+
+            YetiGameData.boardBoughtArray[currentBoard] = true;
+
+            Debug.Log(YetiGameData.SelectedBoard);
+        }else if (YetiGameData.boardBoughtArray[currentBoard])
+        {
+            YetiGameData.SelectedBoard = boardArray[currentBoard].boardType;
+
+            Debug.Log(YetiGameData.SelectedBoard);
+        }
+        
 
     }
 
@@ -293,7 +307,7 @@ public class storeGMScript : MonoBehaviour
         {
             leftCameraControls();
 
-            shopScript.setBoardView(boardArray[currentBoard].name, boardArray[currentBoard].cost, boardArray[currentBoard].desc);
+            shopScript.setBoardView(boardArray[currentBoard].name, (int) boardArray[currentBoard].cost, boardArray[currentBoard].desc, YetiGameData.boardBoughtArray[currentBoard]);
 
             boardArray[currentBoard].boardObject.GetComponent<RotateObjects>().rotating = true;
         }

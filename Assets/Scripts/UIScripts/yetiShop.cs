@@ -49,7 +49,6 @@ public class yetiShop : MonoBehaviour {
         costText.text = "$" + cost;
         purchaseButtonTextYeti.text = "Buy";
 
-
         if (purchased)
         {
             costText.text = " Owned";
@@ -68,6 +67,9 @@ public class yetiShop : MonoBehaviour {
         {
             boardCostText.text = " Owned";
             purchaseButtonTextBoard.text = "Equip";
+        }else
+        {
+            purchaseButtonTextBoard.text = "Buy";
         }
 
         boardDescText.text = description;
