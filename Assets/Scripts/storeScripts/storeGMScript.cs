@@ -86,7 +86,7 @@ public class storeGMScript : MonoBehaviour
         boardArray[0] = new board("Basic Board", 0, "A basic board to start you off.", snowBoard1, YetiGameData.BoardType.NormalBoard);
 
         //sideSpeed board
-        boardArray[1] = new board("Agile Board", 50, "A board that handles well, allowing you to move side to side easier.", snowBoard2, YetiGameData.BoardType.YetiBoard);
+        boardArray[1] = new board("Agile Board", 0, "A board that handles well, allowing you to move side to side easier.", snowBoard2, YetiGameData.BoardType.YetiBoard);
 
         //accel board
         boardArray[2] = new board("Sleek Board", 100, "This board is slimmer and sleeker then the others, allowing you to reach your top speeds faster!", snowBoard3, YetiGameData.BoardType.WampBoard);
