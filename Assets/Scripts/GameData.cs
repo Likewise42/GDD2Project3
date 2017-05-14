@@ -10,6 +10,14 @@ public class YetiGameData {
 
     public static int coldCashMultiplier = 1;
 
+    public enum YetiType { LankyYeti,NormalYeti};
+    
+    public enum BoardType { NormalBoard,ATATBoard, WampBoard,CashBoard,YetiBoard};
+
+
+    public static YetiType SelectedYeti = YetiType.NormalYeti;
+    public static BoardType SelectedBoard = BoardType.NormalBoard;
+
     public static uint currentBoard = 0;
 
     public static uint ColdCash
