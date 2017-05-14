@@ -26,7 +26,9 @@ public class WorldSpin : MonoBehaviour {
 	void Update () {
 
         this.transform.Rotate(new Vector3(0f, speed * Time.deltaTime, 0f));
-        speed += sb.acceleration;
+
+        speed += GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().boardBasedAcceleration;
+
 
         //maximum speed
         if (speed >= sb.maxSpeed)
@@ -34,7 +36,7 @@ public class WorldSpin : MonoBehaviour {
             speed = sb.maxSpeed;
         }
 
-        cam.transform.position = new Vector3(cam.transform.position.x, camOriginal.y + 7 /*(speed / 2)*/, camOriginal.z - 20 /*(speed * 2) */);
+        cam.transform.position = new Vector3(cam.transform.position.x, camOriginal.y + 7, camOriginal.z - 20);
 	}
 
     public void Slow()
