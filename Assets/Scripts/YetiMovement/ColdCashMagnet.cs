@@ -7,7 +7,7 @@ public class ColdCashMagnet : MonoBehaviour
 
     private GameObject coldCash;
 
-    private List<GameObject> CCList;
+    private List<GameObject> CCList = new List<GameObject>();
 
     // Use this for initialization
     void Start()
@@ -25,19 +25,24 @@ public class ColdCashMagnet : MonoBehaviour
             // for all cold cash objects in our CCList
             foreach (GameObject coldCash in CCList)
             {
-                // if there is cold cash, we want to adjust its 'x' position to be the same as the player's 'x' postion
-                if (coldCash.transform.position.x > transform.position.x)
+                if(coldCash != null)
                 {
-                    Vector3 tempColdCashVec = coldCash.transform.position;
-                    tempColdCashVec.x--;
-                    coldCash.transform.position = tempColdCashVec;
+                    // if there is cold cash, we want to adjust its 'x' position to be the same as the player's 'x' postion
+                    float posDiff = transform.position.x - coldCash.transform.position.x;
+                    if (posDiff < -3)
+                    {
+                        Vector3 tempColdCashVec = coldCash.transform.position;
+                        tempColdCashVec.x--;
+                        coldCash.transform.position = tempColdCashVec;
+                    }
+                    else if (posDiff > 3)
+                    {
+                        Vector3 tempColdCashVec = coldCash.transform.position;
+                        tempColdCashVec.x++;
+                        coldCash.transform.position = tempColdCashVec;
+                    }
                 }
-                else if (coldCash.transform.position.x < transform.position.x)
-                {
-                    Vector3 tempColdCashVec = coldCash.transform.position;
-                    tempColdCashVec.x++;
-                    coldCash.transform.position = tempColdCashVec;
-                }
+                
             }
         }
         
