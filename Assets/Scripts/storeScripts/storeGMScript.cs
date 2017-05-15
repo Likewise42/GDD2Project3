@@ -176,7 +176,6 @@ public class storeGMScript : MonoBehaviour
         {
             YetiGameData.SelectedBoard = boardArray[currentBoard].boardType;
 
-            Debug.Log(YetiGameData.SelectedBoard);
         }
         
 
@@ -184,7 +183,6 @@ public class storeGMScript : MonoBehaviour
 
     public void buyYeti()
     {
-        Debug.Log("fuck");
 
         if (YetiGameData.ColdCash >= yetiArray[currentYeti].cost && !YetiGameData.yetiBoughtArray[currentYeti])
         {
@@ -200,7 +198,6 @@ public class storeGMScript : MonoBehaviour
         {
             YetiGameData.SelectedYeti = yetiArray[currentYeti].yetiType;
 
-            Debug.Log(YetiGameData.SelectedYeti);
         }
 
 

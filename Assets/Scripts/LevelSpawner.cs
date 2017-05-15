@@ -110,7 +110,6 @@ public class LevelSpawner : MonoBehaviour {
             GameObject slalomObj = slalomObjs[i];
             
             SlalomObstacle slalomScript = slalomObj.GetComponent<SlalomObstacle>();
-            Debug.Log(slalomScript.ReachedEnd);
             if (slalomScript.ReachedEnd)
             {
                 slalomObjs.RemoveAt(i);
@@ -129,7 +128,6 @@ public class LevelSpawner : MonoBehaviour {
             GameObject slalomCheckpointObj = slalomCheckpointObjs[i];
 
             Obstacle slalomScript = slalomCheckpointObj.GetComponent<Obstacle>();
-            Debug.Log(slalomScript.ReachedEnd);
             if (slalomScript.ReachedEnd)
             {
                 slalomCheckpointObjs.RemoveAt(i);
