@@ -296,7 +296,7 @@ public class Movement : MonoBehaviour {
                 collidingWithRamp = true;
                 break;
             case "LevelEnd":
-                lManager.EndLevel();
+                CollideWithLevelEnd();
                 break;
             case "ColdCash":
                 CollideWithColdCash();
