@@ -12,7 +12,7 @@ public class LevelManager : MonoBehaviour {
     public const float CASH_SPAWN_INTERVAL = 80;
     public const float PICKUP_SPAWN_INTERVAL = 480;
     public const float TIME_TO_SLALOM = 1100;
-    public const float LEVEL_END_SPAWN_INTERVAL = 4200;
+    public const float LEVEL_END_SPAWN_INTERVAL = 200;
 
     // Slalom-specific constants
     public const int NUMBER_OF_SLALOMS = 17;

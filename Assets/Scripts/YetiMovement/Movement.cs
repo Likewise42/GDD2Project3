@@ -15,6 +15,7 @@ public class Movement : MonoBehaviour {
     private float zStart;
     public float boundaryLength;
     private float sideSpeed;
+    private float finalYSpeed;
     public GameObject world;
 
     public YetiGameData.YetiType yetiType;
@@ -41,6 +42,7 @@ public class Movement : MonoBehaviour {
     private bool resetRampJumping;
     private bool finishedSpinningOut;
     private bool lockMovement;
+    private bool levelEndRamp = false;
 
     // MODELS
     public GameObject YetiBoard;
@@ -71,6 +73,7 @@ public class Movement : MonoBehaviour {
         sideSpeed = 2;
         coldCashMultiplier = 5000;
         boardBasedAcceleration = 0.1f;
+        finalYSpeed = 0;
         YetiBoard.SetActive(false);
         CashBoard.SetActive(false);
         ATATBoard.SetActive(false);
@@ -110,7 +113,6 @@ public class Movement : MonoBehaviour {
     void Update()
     {
         acceleration = Vector3.zero;
-
 
         // Handle cashbonus real quick, if necessary
         if (coldCashBonusTimer > 0)
@@ -164,6 +166,15 @@ public class Movement : MonoBehaviour {
             transform.position = new Vector3(transform.position.x, yStart, transform.position.z);
             velocity.y = 0f;
             acceleration.y = 0f;
+        }
+
+
+        // level is over, to the sunset I go
+        if (levelEndRamp)
+        {
+            finalYSpeed += 0.05f;
+            transform.Translate(new Vector3(0, finalYSpeed, 0));
+            applyGrav = false;
         }
 
         // applies gravity
@@ -252,7 +263,7 @@ public class Movement : MonoBehaviour {
             Vector3 overflowVec = new Vector3(-1 * (transform.position.x + (xStart + boundaryLength)), 0, 0);
             transform.Translate(overflowVec, Space.World);
         }
-        
+
         gameObject.GetComponent<Animator>().SetBool("Left", left);
         gameObject.GetComponent<Animator>().SetBool("Right", right);
     }
@@ -261,7 +272,7 @@ public class Movement : MonoBehaviour {
     {
         collidingWithObstacle = false;
     }
-    
+
     void ExitCollideWithRamp()
     {
         collidingWithRamp = false;
@@ -292,7 +303,8 @@ public class Movement : MonoBehaviour {
 
     void CollideWithLevelEnd()
     {
-        lManager.EndLevel();
+        levelEndRamp = true;
+        //lManager.EndLevel();
         world.GetComponent<AudioSource>().Stop();
     }
 
@@ -349,6 +361,7 @@ public class Movement : MonoBehaviour {
         {
             ExitCollideWithObstacle();
         }
+
     }
 
 }
