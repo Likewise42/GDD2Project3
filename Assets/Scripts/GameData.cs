@@ -15,6 +15,7 @@ public class YetiGameData {
     public enum BoardType { NormalBoard, ATATBoard, WampBoard, CashBoard, YetiBoard };
 
     public static bool[] boardBoughtArray = {true, false, false, false, false};
+    public static bool[] yetiBoughtArray = {true, false};
 
     public static YetiType SelectedYeti = YetiType.NormalYeti;
     public static BoardType SelectedBoard = BoardType.NormalBoard;
