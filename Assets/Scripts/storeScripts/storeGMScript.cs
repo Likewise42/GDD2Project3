@@ -89,9 +89,34 @@ public class storeGMScript : MonoBehaviour
     private int currentBoard;
     private int currentYeti;
 
+    public GameObject OGYeti;
+    public GameObject LankyYeti;
+    public GameObject FemaleYeti;
+
+
     // Use this for initialization
     void Start()
     {
+
+        OGYeti.SetActive(false);
+        LankyYeti.SetActive(false);
+        FemaleYeti.SetActive(false);
+
+        switch (YetiGameData.SelectedYeti)
+        {
+            case YetiGameData.YetiType.NormalYeti:
+                OGYeti.SetActive(true);
+                break;
+            case YetiGameData.YetiType.LankyYeti:
+                LankyYeti.SetActive(true);
+                break;
+            case YetiGameData.YetiType.FemaleYeti:
+                FemaleYeti.SetActive(true);
+                break;
+            default:
+                OGYeti.SetActive(true);
+                break;
+        }
 
         currentBoard = 0;
         currentYeti = 0;
