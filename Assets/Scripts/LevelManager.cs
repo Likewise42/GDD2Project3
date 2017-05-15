@@ -11,8 +11,9 @@ public class LevelManager : MonoBehaviour {
     public const float RAMP_SPAWN_INTERVAL = 240;
     public const float CASH_SPAWN_INTERVAL = 80;
     public const float PICKUP_SPAWN_INTERVAL = 480;
-    public const float TIME_TO_SLALOM = 1100;
-    public const float LEVEL_END_SPAWN_INTERVAL = 4200;
+    public const float TIME_TO_SLALOM = 2500;
+    public const float TIME_TO_BONUS_ROUND = 4000;
+    public const float LEVEL_END_SPAWN_INTERVAL = 4800;
 
     // Slalom-specific constants
     public const int NUMBER_OF_SLALOMS = 17;
@@ -29,6 +30,7 @@ public class LevelManager : MonoBehaviour {
     private float pickupSpawnTimer;
     private float levelEndSpawnTimer;
     private float slalomTimer;
+    private float bonusTimer;
 
     public bool hitSlalom;
     private bool canSpawnSlalomCheckpoint;
@@ -38,10 +40,10 @@ public class LevelManager : MonoBehaviour {
 
     public uint coldCashScore = 100;
 
+
+    // Airborne points
     private uint airborneScore = 0;
-
     public uint airSizeMaxScore;
-
     private bool airborne = false;
 
     public int airScorePerNFrames;
@@ -51,7 +53,6 @@ public class LevelManager : MonoBehaviour {
     private uint timesPassedAirScore = 1;
     private int airscoreFrameCount = 0;
 
-    private GameObject levelObj;
 
     private uint currentColdCash;
     private uint score;
@@ -60,6 +61,9 @@ public class LevelManager : MonoBehaviour {
     private bool stopSpawning;
     private bool slalomEvent;
     private int currentSlalomCheckpointCount;
+
+    // GameObjects, to be assigned in editor
+    private GameObject levelObj;
 
     public GameScreenScript gameScreen;
     public GameObject SpawnerObj;
@@ -70,6 +74,12 @@ public class LevelManager : MonoBehaviour {
     public GameObject FemaleYeti;
 
 
+    // Bonus round
+    public const int EVENT_COLD_CASH = 50;
+    public const float TIME_BETWEEN_CASH = 15;
+    private bool bonusEvent;
+    private int currentBonusCashCount;
+
     // Use this for initialization
     void Start()
     {
@@ -79,9 +89,12 @@ public class LevelManager : MonoBehaviour {
         cashSpawnTimer = 0;
         levelEndSpawnTimer = 0;
         slalomTimer = 0;
+        bonusTimer = 0;
         currentSlalomCheckpointCount = 0;
+        currentBonusCashCount = 0;
 
         slalomEvent = false;
+        bonusEvent = false;
         stopSpawning = false;
 
         spawner = SpawnerObj.GetComponent<LevelSpawner>();
@@ -134,7 +147,9 @@ public class LevelManager : MonoBehaviour {
                 airscoreFrameCount++;
             }
         }
+
         timeInSeconds += Time.deltaTime;
+
         if (slalomEvent)
         {
             //  --  Spawning    --
@@ -164,6 +179,35 @@ public class LevelManager : MonoBehaviour {
             else
             {
                 slalomEvent = false;
+                slalomTimer = 0;
+                currentSlalomCheckpointCount = 0;
+            }
+        }
+        else if (bonusEvent)
+        {
+            //  --  Spawning    --
+            if (currentBonusCashCount <= EVENT_COLD_CASH)
+            {
+                if (bonusTimer == 0)
+                {
+                    spawner.CreateBonusCash();
+                    currentBonusCashCount++;
+                    bonusTimer += timePassed;
+                }
+                else if (bonusTimer >= TIME_BETWEEN_CASH)
+                {
+                    bonusTimer = 0;
+                }
+                else
+                {
+                    bonusTimer += timePassed;
+                }
+            }
+            else
+            {
+                bonusEvent = false;
+                bonusTimer = 0;
+                currentBonusCashCount = 0;
             }
         }
         else if (!stopSpawning)
@@ -180,6 +224,12 @@ public class LevelManager : MonoBehaviour {
                 slalomEvent = true;
                 canSpawnSlalomCheckpoint = false;
                 slalomTimer = -1;
+            }
+
+            if (ShouldStartBonus())
+            {
+                bonusEvent = true;
+                bonusTimer = -1;
             }
 
             if (ShouldSpawnObstacle())
@@ -221,6 +271,7 @@ public class LevelManager : MonoBehaviour {
             pickupSpawnTimer += timePassed;
             levelEndSpawnTimer += timePassed;
             slalomTimer += timePassed;
+            bonusTimer += timePassed;
 
             gameScreen.SetDistancePercent((float)levelEndSpawnTimer / (float)LEVEL_END_SPAWN_INTERVAL);
         }
@@ -231,8 +282,18 @@ public class LevelManager : MonoBehaviour {
         if (slalomTimer >= TIME_TO_SLALOM)
         {
             slalomTimer = 0;
-            slalomEvent = true;
             hitSlalom = false;
+            return true;
+        }
+
+        return false;
+    }
+    bool ShouldStartBonus()
+    {
+        if (bonusTimer >= TIME_TO_BONUS_ROUND)
+        {
+            bonusTimer = 0;
+            bonusEvent = true;
             return true;
         }
 
