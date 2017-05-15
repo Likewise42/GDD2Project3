@@ -155,6 +155,7 @@ public class storeGMScript : MonoBehaviour
 
     public void buyYeti()
     {
+        Debug.Log("fuck");
 
         if (YetiGameData.ColdCash >= yetiArray[currentYeti].cost && !YetiGameData.yetiBoughtArray[currentYeti])
         {
