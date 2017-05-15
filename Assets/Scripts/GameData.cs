@@ -10,12 +10,12 @@ public class YetiGameData {
 
     public static int coldCashMultiplier = 1;
 
-    public enum YetiType { LankyYeti, NormalYeti };
+    public enum YetiType { LankyYeti, NormalYeti, FemaleYeti };
 
     public enum BoardType { NormalBoard, ATATBoard, WampBoard, CashBoard, YetiBoard };
 
     public static bool[] boardBoughtArray = {true, false, false, false, false};
-    public static bool[] yetiBoughtArray = {true, false};
+    public static bool[] yetiBoughtArray = {true, false, false};
 
     public static YetiType SelectedYeti = YetiType.NormalYeti;
     public static BoardType SelectedBoard = BoardType.NormalBoard;

@@ -61,6 +61,7 @@ public class storeGMScript : MonoBehaviour
 
     public GameObject yeti1;
     public GameObject yeti2;
+    public GameObject yeti3;
 
 
     //public Vector3 acceleration;
@@ -83,7 +84,7 @@ public class storeGMScript : MonoBehaviour
 
    // private ArrayList yetiArray;
     private board[] boardArray = new board[5];
-    private yeti[] yetiArray = new yeti[2];
+    private yeti[] yetiArray = new yeti[3];
 
     private int currentBoard;
     private int currentYeti;
@@ -125,6 +126,9 @@ public class storeGMScript : MonoBehaviour
 
         //lanky yeti
         yetiArray[1] = new yeti("Lanky Yeti", 1500, "A lankier, smoother yeti.", yeti2, YetiGameData.YetiType.LankyYeti);
+
+        //lanky yeti
+        yetiArray[2] = new yeti("Female Yeti", 1500, "Yetis can be female too.", yeti3, YetiGameData.YetiType.FemaleYeti);
 
 
 
@@ -192,6 +196,9 @@ public class storeGMScript : MonoBehaviour
         boardArray[2].boardObject.GetComponent<RotateObjects>().rotating = false;
         boardArray[3].boardObject.GetComponent<RotateObjects>().rotating = false;
         boardArray[4].boardObject.GetComponent<RotateObjects>().rotating = false;
+        yetiArray[0].yetiObject.GetComponent<RotateObjects>().rotating = false;
+        yetiArray[1].yetiObject.GetComponent<RotateObjects>().rotating = false;
+        yetiArray[2].yetiObject.GetComponent<RotateObjects>().rotating = false;
     }
         
     //https://gamedev.stackexchange.com/questions/121469/unity3d-smooth-rotation-for-seek-steering-behavior
@@ -235,7 +242,7 @@ public class storeGMScript : MonoBehaviour
             currentYeti--;
 
         }
-        else if(direction == "right" && rightCameraTransform.position.z > -12)
+        else if(direction == "right" && rightCameraTransform.position.z > -8)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
