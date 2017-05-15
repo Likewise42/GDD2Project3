@@ -20,6 +20,24 @@ public class board
     }
 }
 
+public class yeti
+{
+    public string name;
+    public uint cost;
+    public string desc;
+    public GameObject yetiObject;
+    public YetiGameData.YetiType yetiType;
+
+    public yeti(string Name, uint Cost, string Desc, GameObject Yeti, YetiGameData.YetiType YetiType)
+    {
+        name = Name;
+        cost = Cost;
+        desc = Desc;
+        yetiObject = Yeti;
+        yetiType = YetiType;
+    }
+}
+
 public class storeGMScript : MonoBehaviour
 {
     public Camera mainCamera;
@@ -41,6 +59,10 @@ public class storeGMScript : MonoBehaviour
     public GameObject snowBoard4;
     public GameObject snowBoard5;
 
+    public GameObject yeti1;
+    public GameObject yeti2;
+
+
     //public Vector3 acceleration;
     public Vector3 velocity;
 
@@ -61,16 +83,17 @@ public class storeGMScript : MonoBehaviour
 
    // private ArrayList yetiArray;
     private board[] boardArray = new board[5];
+    private yeti[] yetiArray = new yeti[2];
 
     private int currentBoard;
+    private int currentYeti;
 
     // Use this for initialization
     void Start()
     {
 
         currentBoard = 0;
-
-
+        currentYeti = 0;
 
         //targetTransform = startingCameraTransform;
 
@@ -97,6 +120,13 @@ public class storeGMScript : MonoBehaviour
         //c val board
         boardArray[4] = new board("Money Board", 500, "A board with the innate ability to make Cold Cash more valuable.", snowBoard5, YetiGameData.BoardType.CashBoard);
 
+        //default yeti
+        yetiArray[0] = new yeti("OG Yeti", 0, "The original yeti.", yeti1, YetiGameData.YetiType.NormalYeti);
+
+        //lanky yeti
+        yetiArray[1] = new yeti("Lanky Yeti", 1500, "A lankier, smoother yeti.", yeti2, YetiGameData.YetiType.LankyYeti);
+
+
 
         whichView = 1;
     }
@@ -120,6 +150,29 @@ public class storeGMScript : MonoBehaviour
             Debug.Log(YetiGameData.SelectedBoard);
         }
         
+
+    }
+
+    public void buyYeti()
+    {
+
+        if (YetiGameData.ColdCash >= yetiArray[currentYeti].cost && !YetiGameData.yetiBoughtArray[currentYeti])
+        {
+            YetiGameData.ColdCash -= yetiArray[currentYeti].cost;
+
+            YetiGameData.SelectedYeti = yetiArray[currentYeti].yetiType;
+
+            YetiGameData.yetiBoughtArray[currentYeti] = true;
+
+            Debug.Log(YetiGameData.SelectedYeti);
+        }
+        else if (YetiGameData.yetiBoughtArray[currentYeti])
+        {
+            YetiGameData.SelectedYeti = yetiArray[currentYeti].yetiType;
+
+            Debug.Log(YetiGameData.SelectedYeti);
+        }
+
 
     }
 
@@ -177,13 +230,18 @@ public class storeGMScript : MonoBehaviour
             Vector3 moveZ = new Vector3(0, 0, 2);
 
             rightCameraTransform.position += moveZ;
-            
+
+            currentYeti--;
+
         }
         else if(direction == "right" && rightCameraTransform.position.z > -12)
         {
             Vector3 moveZ = new Vector3(0, 0, 2);
 
             rightCameraTransform.position -= moveZ;
+
+            currentYeti++;
+
         }
     }
 
@@ -299,8 +357,9 @@ public class storeGMScript : MonoBehaviour
         {
             rightCameraControls();
 
+            shopScript.setYetiView(yetiArray[currentYeti].name, (int)yetiArray[currentYeti].cost, yetiArray[currentYeti].desc, YetiGameData.yetiBoughtArray[currentYeti]);
 
-            shopScript.setYetiView("Jim", 3, "DESC");
+            yetiArray[currentYeti].yetiObject.GetComponent<RotateObjects>().rotating = true;
         }
         //else if looking at boards
         else if (whichView == 3)
