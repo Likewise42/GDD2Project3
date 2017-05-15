@@ -28,6 +28,12 @@ public class LevelSpawner : MonoBehaviour {
     private Vector3 startPos;
     private Quaternion startRot;
 
+    private float bonusCashHorizPos;
+    private float bonusHorizAdjust = 3;
+    private float bonusHorizDirection = 1;
+    private int bonusCashSpawned = 0;
+    private const int CASH_LINE_SIZE = 7;
+
     // Use this for initialization
     void Start()
     {
@@ -39,6 +45,8 @@ public class LevelSpawner : MonoBehaviour {
         pickups = new List<GameObject>();
         startPos = gameObject.transform.position;
         startRot = gameObject.transform.rotation;
+
+        bonusCashHorizPos = 0;
 
         levelObj = GameObject.FindGameObjectWithTag("World");
     }
@@ -233,6 +241,31 @@ public class LevelSpawner : MonoBehaviour {
         return CreateObject(MultiplierPickupPrefab,
                             new Vector3(Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH, 6, 0),
                             pickups);
+    }
+
+    public GameObject CreateBonusCash()
+    {
+        GameObject newObj = CreateObject(coldCashPrefab,
+                            new Vector3(bonusCashHorizPos, 3, 0),
+                            coldcash);
+
+        bonusCashSpawned++;
+        if (bonusCashSpawned >= CASH_LINE_SIZE)
+        {
+            bonusCashHorizPos = Random.Range(-1.0f, 1.0f) * HALF_LEVEL_WIDTH;
+            bonusCashSpawned = 0;
+        }
+
+        // Use this instead if you want a curving continuous line
+        //bonusCashHorizPos += bonusHorizAdjust * bonusHorizDirection;
+
+        //if (bonusCashHorizPos >= HALF_LEVEL_WIDTH || bonusCashHorizPos <= -1 * HALF_LEVEL_WIDTH)
+        //{
+        //    bonusHorizDirection *= -1;
+        //    bonusCashHorizPos += bonusHorizAdjust * 2 * bonusHorizDirection;
+        //}
+
+        return newObj;
     }
 
     private GameObject CreateObject(GameObject prefab, Vector3 adjustmentVector, List<GameObject> objectList)
