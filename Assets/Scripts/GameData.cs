@@ -21,6 +21,8 @@ public class YetiGameData {
     public static BoardType SelectedBoard = BoardType.NormalBoard;
 
     public static uint currentBoard = 0;
+    public static uint currentYeti = 0;
+
 
     public static uint ColdCash
     {
