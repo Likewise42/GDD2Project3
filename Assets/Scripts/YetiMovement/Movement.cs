@@ -42,6 +42,13 @@ public class Movement : MonoBehaviour {
     private bool finishedSpinningOut;
     private bool lockMovement;
 
+    // MODELS
+    public GameObject YetiBoard;
+    public GameObject CashBoard;
+    public GameObject ATATBoard;
+    public GameObject WampBoard;
+    public GameObject NormalBoard;
+
     // Use this for initialization
     void Start()
     {
@@ -62,27 +69,38 @@ public class Movement : MonoBehaviour {
 
         // reset everything to default values
         sideSpeed = 2;
-        coldCashMultiplier = 50;
+        coldCashMultiplier = 1;
         boardBasedAcceleration = 0.1f;
-
+        YetiBoard.SetActive(false);
+        CashBoard.SetActive(false);
+        ATATBoard.SetActive(false);
+        WampBoard.SetActive(false);
+        NormalBoard.SetActive(false);
+        
         switch (YetiGameData.SelectedBoard)
         {
             case (YetiGameData.BoardType.YetiBoard): // agile board
                 sideSpeed = 4;
+                YetiBoard.SetActive(true);
                 break;
             case (YetiGameData.BoardType.CashBoard): // cash board
-                coldCashMultiplier = 2;
+                coldCashMultiplier *= 2;
+                CashBoard.SetActive(true);
                 break;
             case (YetiGameData.BoardType.ATATBoard): // magnet board
                 //coldCashMultiplier = 2;
                 Debug.Log("Using the magnet board");
+                ATATBoard.SetActive(true);
                 break;
             case (YetiGameData.BoardType.WampBoard): // acceleration board
                 boardBasedAcceleration = 0.2f;
+                WampBoard.SetActive(true);
                 break;
             case (YetiGameData.BoardType.NormalBoard): // default board
+                NormalBoard.SetActive(true);
                 break;
             default:
+                NormalBoard.SetActive(true);
                 break;
         } 
 
@@ -239,7 +257,6 @@ public class Movement : MonoBehaviour {
     void CollideWithColdCash()
     {
 
-        Debug.Log("Cold cash multiplier: " + coldCashMultiplier);
         lManager.addColdCash(coldCashMultiplier);
 
         if(!this.GetComponent<AudioSource>().isPlaying)
