@@ -228,6 +228,20 @@ public class Movement : MonoBehaviour {
 
 
         // left and right boundaries
+        if(YetiGameData.YetiType.LankyYeti == YetiGameData.SelectedYeti)
+        {
+            if (transform.position.x > xStart + boundaryLength)
+            {
+                Vector3 overflowVec = new Vector3(-1 * (transform.position.x - (xStart + boundaryLength) - 2), 0, 0);
+                transform.Translate(overflowVec, Space.World);
+            }
+            else if (transform.position.x < xStart - boundaryLength)
+            {
+                Vector3 overflowVec = new Vector3(-1 * (transform.position.x + (xStart + boundaryLength) + 2), 0, 0);
+                transform.Translate(overflowVec, Space.World);
+            }
+        }
+
         if (transform.position.x > xStart + boundaryLength)
         {
             Vector3 overflowVec = new Vector3(-1 * (transform.position.x - (xStart + boundaryLength)), 0, 0);
