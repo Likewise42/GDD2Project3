@@ -15,6 +15,8 @@ public class LevelManager : MonoBehaviour {
     public const float TIME_TO_BONUS_ROUND = 4000;
     public const float LEVEL_END_SPAWN_INTERVAL = 4800;
 
+    public const float LEVEL_END_DELAY = 200;
+
     // Slalom-specific constants
     public const int NUMBER_OF_SLALOMS = 17;
     private const float SLALOM_CHECKPOINT_TIMER = 10;
@@ -210,11 +212,22 @@ public class LevelManager : MonoBehaviour {
                 currentBonusCashCount = 0;
             }
         }
+        else if (stopSpawning)
+        {
+            if (levelEndSpawnTimer >= LEVEL_END_DELAY)
+            {
+                spawner.CreateLevelEnd();
+            }
+            else
+            {
+                levelEndSpawnTimer += timePassed;
+            }
+        }
         else if (!stopSpawning)
         {
             if (ShouldSpawnLevelEnd())
             {
-                spawner.CreateLevelEnd();
+                //spawner.CreateLevelEnd();
                 stopSpawning = true;
                 return; // Don't bother running the rest of Update
             }
