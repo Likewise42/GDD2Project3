@@ -50,8 +50,6 @@ public class WorldSpin : MonoBehaviour {
             }
         }
 
-        Debug.Log(speed);
-
         if (slowingDown)
         {
             sb.maxSpeed *= .95f;

@@ -321,6 +321,7 @@ public class Movement : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         GameObject otherObj = other.gameObject;
+
         switch (otherObj.tag)
         {
             case "Obstacle":
@@ -345,12 +346,15 @@ public class Movement : MonoBehaviour {
                 lManager.procSlalom();
                 break;
             case "Pickup_Boost":
+                GameObject.Find("mountain_Snow_000 (1)").GetComponent<AudioSource>().Play();
                 world.GetComponent<WorldSpin>().SpeedBoost();
                 break;
             case "Pickup_CashBonus":
+                GameObject.Find("mountain_Snow_000").GetComponent<AudioSource>().Play();
                 CollideWithCashBonus();
                 break;
             case "Pickup_Multiplier":
+                GameObject.Find("mountain_Snow_000 (2)").GetComponent<AudioSource>().Play();
                 lManager.scoreMultiplier += 0.25f;
                 lManager.addScore(0);
                 break;
