@@ -71,7 +71,7 @@ public class Movement : MonoBehaviour {
 
         // reset everything to default values
         sideSpeed = 2;
-        coldCashMultiplier = 5000;
+        coldCashMultiplier = 1;
         boardBasedAcceleration = 0.1f;
         finalYSpeed = 0;
         YetiBoard.SetActive(false);
@@ -343,7 +343,6 @@ public class Movement : MonoBehaviour {
             case "Pickup_Multiplier":
                 lManager.scoreMultiplier += 0.25f;
                 lManager.addScore(0);
-                // Debug.Log(lManager.scoreMultiplier);
                 break;
             default:
                 break;
