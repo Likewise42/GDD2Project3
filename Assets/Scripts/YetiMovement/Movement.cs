@@ -35,6 +35,11 @@ public class Movement : MonoBehaviour {
 
     private bool airborne = false;
 
+    //variables for speed boost powerup
+    private bool speeding;
+    private float timer;
+    private bool originalMaxSpeed;
+
     private Snowboard sb;
     private bool collidingWithRamp;
     private bool collidingWithObstacle;
@@ -57,6 +62,8 @@ public class Movement : MonoBehaviour {
         yStart = transform.position.y;
         xStart = transform.position.x;
         zStart = transform.position.z;
+
+        speeding = false;
 
         collidingWithRamp = false;
         justLeftRamp = false;
@@ -83,19 +90,22 @@ public class Movement : MonoBehaviour {
         switch (YetiGameData.SelectedBoard)
         {
             case (YetiGameData.BoardType.YetiBoard): // agile board
-                sideSpeed = 4;
+                sideSpeed = 5;
                 YetiBoard.SetActive(true);
                 break;
             case (YetiGameData.BoardType.CashBoard): // cash board
+                sideSpeed = 3;
                 coldCashMultiplier *= 2;
                 CashBoard.SetActive(true);
                 break;
             case (YetiGameData.BoardType.ATATBoard): // magnet board
+                sideSpeed = 4;
                 //coldCashMultiplier = 2;
-                Debug.Log("Using the magnet board");
+                //Debug.Log("Using the magnet board");
                 ATATBoard.SetActive(true);
                 break;
             case (YetiGameData.BoardType.WampBoard): // acceleration board
+                sideSpeed = 4;
                 boardBasedAcceleration = 0.2f;
                 WampBoard.SetActive(true);
                 break;
@@ -105,7 +115,7 @@ public class Movement : MonoBehaviour {
             default:
                 NormalBoard.SetActive(true);
                 break;
-        } 
+        }
 
     }
 
@@ -335,7 +345,7 @@ public class Movement : MonoBehaviour {
                 lManager.procSlalom();
                 break;
             case "Pickup_Boost":
-                // Boost logic goes here - remember to add some sort of glow(?) to the player to indicate they have a powerup
+                world.GetComponent<WorldSpin>().SpeedBoost();
                 break;
             case "Pickup_CashBonus":
                 CollideWithCashBonus();
@@ -362,6 +372,5 @@ public class Movement : MonoBehaviour {
         }
 
     }
-
 }
  
